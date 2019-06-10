@@ -1,4 +1,4 @@
-from flask import Flask, render_template
+from flask import Flask, render_template, request
 from werkzeug.security import generate_password_hash, check_password_hash
 
 
@@ -18,14 +18,37 @@ app = Flask(__name__)
 def home():
     return render_template('index.html')
 
-@app.route('/register')
+@app.route('/register', methods=['POST', 'GET'])
 def register():
+
+    if request.method == 'POST':
+        name = request.form['name']
+        email = request.form['email']
+        password = generate_password_hash(request.form['password'])
+        user = User(name=name, email=email, password=password)
+        db_session.add(user)
+        db_session.commit()
+        return "Registeration Successful"
+
     return render_template('register.html')
 
-@app.route('/login')
+@app.route('/login', methods=['GET', 'POST'])
 def login():
+    if request.method == 'POST':
+        email = request.form['email']
+        password = request.form['password']
+        try:
+            user = db_session.query(User).filter(User.email == email).one()
+        except:
+            return "User Not Found"
+        passcheck = check_password_hash(user.password, password)
+        return "Login Successful" if passcheck and user is not None else "Invalid Username/Password"
+
     return render_template('login.html')
 
+@app.route('/resetpassword')
+def resetpassword():
+    return "reset Password"
 @app.route('/category')
 def category():
     return render_template('category.html')

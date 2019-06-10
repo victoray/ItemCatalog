@@ -51,12 +51,12 @@
                     <div class="dt-login__content-inner">
 
                         <!-- Form -->
-                        <form action="http://drift.g-axon.work/html-bs4/default/index.php">
+                        <form action="{{url_for('login')}}" method="post">
 
                             <!-- Form Group -->
                             <div class="form-group">
                                 <label class="sr-only" for="email-1">Email address</label>
-                                <input type="email" class="form-control" id="email-1" aria-describedby="email-1"
+                                <input type="email" name="email" class="form-control" id="email-1" aria-describedby="email-1"
                                        placeholder="Enter email">
                             </div>
                             <!-- /form group -->
@@ -64,7 +64,7 @@
                             <!-- Form Group -->
                             <div class="form-group">
                                 <label class="sr-only" for="password-1">Password</label>
-                                <input type="password" class="form-control" id="password-1" placeholder="Password">
+                                <input type="password" name="password" class="form-control" id="password-1" placeholder="Password">
                             </div>
                             <!-- /form group -->
 
@@ -81,7 +81,7 @@
                             <div class="form-group">
                                 <button type="submit" class="btn btn-primary text-uppercase">Login</button>
                                 <span class="d-inline-block ml-4">Or
-              <a class="d-inline-block font-weight-500 ml-3" href="page-signup.php">Create New Account</a>
+              <a class="d-inline-block font-weight-500 ml-3" href="{{url_for('register')}}">Create New Account</a>
             </span>
                             </div>
                             <!-- /form group -->
@@ -137,7 +137,7 @@
 
                     <!-- Login Content Footer -->
                     <div class="dt-login__content-footer">
-                        <a href="page-forgot-password.php">Can’t access your account?</a>
+                        <a href="{{url_for('resetpassword')}}">Can’t access your account?</a>
                     </div>
                     <!-- /login content footer -->
 
