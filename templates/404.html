@@ -1,0 +1,45 @@
+{% extends "index.html" %}
+{% block body %}
+<body class="dt-sidebar--fixed dt-header--fixed">
+
+<!-- Loader -->
+<div class="dt-loader-container">
+  <div class="dt-loader">
+    <svg class="circular" viewBox="25 25 50 50">
+      <circle class="path" cx="50" cy="50" r="20" fill="none" stroke-width="2" stroke-miterlimit="10"></circle>
+    </svg>
+  </div>
+</div>
+<!-- /loader -->
+<!-- Root -->
+<div class="dt-root">
+    <div class="dt-root__inner">
+
+        <!-- Login Container -->
+        <div class="dt-page--container">
+
+            <!-- 404 Page -->
+            <div class="error-page text-center">
+
+                <!-- Title -->
+                <h1 class="title">404</h1>
+                <!-- /title -->
+
+                <p class="display-2 text-dark mb-7">Sorry! The page not found</p>
+                <p class="mb-10">The Link You Followed Probably Broken, or the page has been removed.</p>
+
+                <!-- Search Box -->
+                <button type="button" class="btn btn-primary btn-lg mr-2 mb-2"><a style="color: white" href="/">Home</a></button>
+                <!-- /search box -->
+
+                <!---->
+
+            </div>
+            <!-- /404 page -->
+
+        </div>
+        <!-- /login container -->
+    </div>
+
+</div>
+{% endblock %}
