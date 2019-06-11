@@ -7,7 +7,7 @@ from flask_login import login_user, current_user, LoginManager, login_required, 
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from werkzeug.security import generate_password_hash, check_password_hash
-
+from waitress import serve
 from db_setup import Base, User, Category, Items
 
 engine = create_engine('sqlite:///itemcatalog.db')
@@ -47,8 +47,8 @@ def home():
     items = db_session.query(Items).order_by(Items.id.desc()).limit(5).all()
 
     db_session.close()
-    return render_template('index.html', flashes=flashes, count=len(flashes),
-                           user=current_user, counter=counter, categories=categories, items=items)
+    return render_template('index.html', flashes=reversed(flashes), count=len(flashes),
+                           user=current_user, categories=categories, items=items)
 
 
 @app.route('/register', methods=['POST', 'GET'])
@@ -190,17 +190,35 @@ def item(category_id):
     db_session = start()
 
     category = db_session.query(Category).filter(Category.id == category_id).one()
-
     category_items = db_session.query(Items).filter(Items.category_id == category_id).all()
 
     db_session.close()
-    return render_template('item.html', user=current_user, category=category, category_items=category_items)
+    return render_template('item.html', flashes=reversed(flashes), count=len(flashes), user=current_user, category=category, category_items=category_items)
 
 
-@app.route('/<int:category_id>/<int:item_id>/edit')
+@app.route('/<int:category_id>/<int:item_id>/edit', methods=['GET', 'POST'])
 @login_required
 def edit_item(category_id, item_id):
-    return "edit category"
+    db_session = start()
+
+    category = db_session.query(Category).filter(Category.id == category_id).one()
+    item = db_session.query(Items).filter(Items.id == item_id).one()
+
+    if request.method == 'POST':
+        item.name = request.form.get('name')
+        item.url = request.form.get('url')
+        item.description = request.form.get('description')
+
+        db_session.commit()
+        db_session.close()
+
+        flashes.append('Item Updated')
+        flash("Item successfully updated")
+        return redirect(url_for('item', category_id=category_id))
+
+
+    db_session.close()
+    return render_template('edit-item.html', user=current_user, category=category, item=item)
 
 
 @app.route('/<int:category_id>/new', methods=['GET', 'POST'])
@@ -216,18 +234,32 @@ def new_item(category_id):
         db_session.add(item)
         db_session.commit()
         db_session.close()
-        flashes.append('New Category Added')
-        flash("New Category Added")
-        return redirect(url_for('home'))
+        flashes.append('New Item Added')
+        flash("New Item Added")
+        return redirect(url_for('item', category_id=category_id))
 
     db_session.close()
     return render_template('new-item.html', category=category, user=current_user)
 
 
-@app.route('/category/<int:category_id>/<int:item_id>/delete')
+@app.route('/<int:category_id>/<int:item_id>/delete', methods=['GET', 'POST'])
 @login_required
 def delete_item(category_id, item_id):
-    return "delete category"
+    db_session = start()
+
+    category = db_session.query(Category).filter(Category.id == category_id).one()
+    item = db_session.query(Items).filter(Items.id == item_id).one()
+
+    if request.method == 'POST':
+        db_session.delete(item)
+        db_session.commit()
+        db_session.close()
+        flashes.append("{} Deleted".format(item.name))
+        flash("{} Deleted".format(item.name))
+        return redirect(url_for('item', category_id=category_id))
+
+    db_session.close()
+    return render_template('delete-item.html', user=current_user, category=category, item=item)
 
 
 @app.errorhandler(404)
@@ -244,4 +276,5 @@ def page_not_found(e):
 if __name__ == "__main__":
     app.secret_key = "".join(random.choice(string.punctuation + string.ascii_letters) for i in range(32))
     app.debug = True
-    app.run(host="localhost", port=10000)
+    serve(app, host='0.0.0.0', port=1000)
+    #app.run(host="localhost", port=10000)

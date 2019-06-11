@@ -1,106 +1,130 @@
 {% extends 'index.html' %}
+{% block title%}{{category.name}}{% endblock %}
 {% block body %}
 {% block header %}
 {{ super() }}
 {% endblock %}
-            <!-- Site Content Wrapper -->
-            <div class="dt-content-wrapper">
+<!-- Site Content Wrapper -->
+<div class="dt-content-wrapper">
 
-                <!-- Site Content -->
-                <div class="dt-content">
+    <!-- Site Content -->
+    <div class="dt-content">
 
-                    <!-- Page Header -->
-                    <div class="dt-page__header">
-                        <h1 class="dt-page__title">{{ category.name }}</h1>
+        <!-- Page Header -->
+        <div class="dt-page__header">
+            <h1 class="dt-page__title">{{ category.name }}</h1>
+        </div>
+        <!-- /page header -->
+
+        <!-- Grid -->
+        <div class="row">
+
+            <!-- Grid Item -->
+            <div class="col-12">
+
+                <!-- Card -->
+                <div class="dt-card">
+
+                    <!-- Card Header -->
+                    <div class="dt-card__header">
+
+                        <!-- Card Heading -->
+                        <div class="dt-card__heading">
+                            <h3 class="dt-card__title">Items</h3>
+                        </div>
+                        <!-- /card heading -->
+                        {% if user.is_authenticated %}
+
+                        <a href="{{url_for('new_item', category_id = category.id)}}" class="d-inline-block"><i
+                                class="icon icon-circle-add-o mr-2"></i>Add New</a>
+                        {% endif %}
+
                     </div>
-                    <!-- /page header -->
+                    <!-- /card header -->
 
-                  <!-- Grid -->
-                  <div class="row">
+                    <!-- Card Body -->
+                    <div class="dt-card__body">
 
-                    <!-- Grid Item -->
-                    <div class="col-12">
+                        <!-- Accordion -->
+                        <div class="accordion" id="accordion-example">
 
-                            <!-- Card -->
-                            <div class="dt-card">
-
-                                <!-- Card Header -->
-                                <div class="dt-card__header">
-
-                                    <!-- Card Heading -->
-                                    <div class="dt-card__heading">
-                                        <h3 class="dt-card__title">Items</h3>
-                                    </div>
-                                    <!-- /card heading -->
-
+                            {% for item in category_items %}
+                            <div class="card">
+                                <div class="card-header" id="headingOne">
+                                    <h5 class="mb-0">
+                                        <button class="btn btn-link collapsed" type="button" data-toggle="collapse"
+                                                data-target="#collapse-{{item.id}}" aria-expanded="false"
+                                                aria-controls="collapse-one">
+                                            {{item.name}}
+                                        </button>
+                                    </h5>
                                 </div>
-                                <!-- /card header -->
 
-                                <!-- Card Body -->
-                                <div class="dt-card__body">
+                                <div id="collapse-{{item.id}}" class="collapse" aria-labelledby="headingOne"
+                                     data-parent="#accordion-example" style="">
+                                    <div class="card-body">
+                                        <div class="media media-news">
 
-                                    <!-- Accordion -->
-                                    <div class="accordion" id="accordion-example">
+                                            <!-- Image -->
+                                            <img style="width: 250px;" class="img-fluid rounded-xl order-sm-2 ml-sm-10"
+                                                 src="{{item.url}}"
+                                                 alt="{{item.name}}">
+                                            <!-- /image -->
 
-                                        {% for item in category_items %}
-                                        <div class="card">
-                                            <div class="card-header" id="headingOne">
-                                                <h5 class="mb-0">
-                                                    <button class="btn btn-link collapsed" type="button" data-toggle="collapse" data-target="#collapse-{{item.id}}" aria-expanded="false" aria-controls="collapse-one">
-                                                        {{item.name}}
-                                                    </button>
-                                                </h5>
+                                            <!-- Media Body -->
+                                            <div class="media-body order-sm-1">
+                                                <h4 class="mb-2">{{item.name}}</h4>
+                                                <p class="mb-5">
+                                                    {{item.description}}
+                                                </p>
                                             </div>
+                                            <!-- /media body -->
 
-                                            <div id="collapse-{{item.id}}" class="collapse" aria-labelledby="headingOne" data-parent="#accordion-example" style="">
-                                                <div class="card-body">
-                                                    <div class="media media-news">
 
-                                                <!-- Image -->
-                                                <img style="width: 80px;" class="img-fluid rounded-xl order-sm-2 ml-sm-10"
-                                                     src="{{item.url}}"
-                                                     alt="Currency">
-                                                <!-- /image -->
-
-                                                <!-- Media Body -->
-                                                <div class="media-body order-sm-1">
-                                                    <h4 class="mb-2">Item: {{item.name}}</h4>
-                                                    <h5><a href="{{url_for('item', category_id = category.id)}}">Category: {{category.name}}</a></h5>
-                                                    <p class="mb-5">
-                                                        {{item.description}}
-                                                    </p>
-                                                </div>
-                                                <!-- /media body -->
-
-                                            </div>
-                                                </div>
-                                            </div>
                                         </div>
-                                        {% endfor %}
-
+                                        {% if user.is_authenticated %}
+                                        <div>
+                                            <!-- Action Button Group -->
+                                            <div class="action-btn-group">
+                                                <button class="btn btn-primary btn-sm"><a style="color: white"
+                                                                                          href="{{url_for('edit_item', category_id=category.id, item_id=item.id)}}">
+                                                    Edit </a></button>
+                                                <button class="btn btn-secondary btn-sm"><a style="color: white"
+                                                                                            href="{{url_for('delete_item', category_id=category.id, item_id = item.id)}}">
+                                                    Delete </a></button>
+                                            </div>
+                                            <!-- /action button group -->
+                                        </div>
+                                        {% endif %}
                                     </div>
-                                    <!-- /accordion -->
 
                                 </div>
-                                <!-- /card body -->
-
                             </div>
-                            <!-- /card -->
+                            {% endfor %}
 
                         </div>
-                    <!-- /grid item -->
+                        <!-- /accordion -->
 
-                  </div>
-                  <!-- /grid -->
+                    </div>
+                    <!-- /card body -->
 
                 </div>
-                <!-- /site content -->
+                <!-- /card -->
 
-                <!-- Footer -->
-<footer class="dt-footer">
-  Copyright Company Name © 2019
-</footer>
-<!-- /footer -->
             </div>
-            <!-- /site content wrapper -->
+            <!-- /grid item -->
+
+        </div>
+        <!-- /grid -->
+
+    </div>
+    <!-- /site content -->
+
+    <!-- Footer -->
+    <footer class="dt-footer">
+        Copyright Company Name © 2019
+    </footer>
+    <!-- /footer -->
+</div>
+<!-- /site content wrapper -->
 {% endblock %}

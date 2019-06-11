@@ -14,22 +14,22 @@
     <title>{% block title%}Catalog{% endblock %}</title>
 
     <!-- Site favicon -->
-    <link rel="shortcut icon" href="../static/images/favicon.ico" type="image/x-icon">
+    <link rel="shortcut icon" href="{{url_for('static', filename='images/favicon.ico')}}" type="image/x-icon">
     <!-- /site favicon -->
 
     <!-- Font Icon Styles -->
-    <link rel="stylesheet" href="../static/flag-icon.min.css">
-    <link rel="stylesheet" href="../static/styles.css">
+    <link rel="stylesheet" href="{{url_for('static', filename='flag-icon.min.css')}}">
+    <link rel="stylesheet" href="{{url_for('static', filename='styles.css')}}">
     <!-- /font icon Styles -->
 
     <!-- Perfect Scrollbar stylesheet -->
-    <link rel="stylesheet" href="../static/perfect-scrollbar.css">
+    <link rel="stylesheet" href="{{url_for('static', filename='perfect-scrollbar.css')}}">
     <!-- /perfect scrollbar stylesheet -->
 
     <!-- Load Styles -->
-    <link rel="stylesheet" href="../static/owl.carousel.min.css">
-    <link rel="stylesheet" href="../static/chartist.min.css">
-    <link rel="stylesheet" href="../static/css/semidark-style-1.min.css">
+    <link rel="stylesheet" href="{{url_for('static', filename='owl.carousel.min.css')}}">
+    <link rel="stylesheet" href="{{url_for('static', filename='chartist.min.css')}}">
+    <link rel="stylesheet" href="{{url_for('static', filename='css/semidark-style-1.min.css')}}">
     <!-- /load styles -->
 
 </head>
@@ -79,8 +79,8 @@
                     <!-- Brand logo -->
                     <span class="dt-brand__logo">
         <a class="dt-brand__logo-link" href="/">
-          <img style="width: 85px" class=" d-none d-sm-inline-block" src="../static/images/logo.png" alt="Drift">
-          <img class="dt-brand__logo-symbol d-sm-none" src="../static/images/logo-symbol.png" alt="Drift">
+          <img style="width: 85px" class=" d-none d-sm-inline-block" src="{{url_for('static', filename='images/logo.png')}}" alt="Drift">
+          <img class="dt-brand__logo-symbol d-sm-none" src="{{url_for('static', filename='images/logo-symbol.png')}}" alt="Drift">
         </a>
       </span>
                     <!-- /brand logo -->
@@ -90,27 +90,6 @@
 
                 <!-- Header toolbar-->
                 <div class="dt-header__toolbar">
-
-                    <!-- Search box -->
-                    <form class="search-box d-none d-lg-block">
-                        <div class="input-group">
-                            <input class="form-control" placeholder="Search in app..." value="" type="search">
-                            <span class="search-icon"><i class="icon icon-search icon-lg"></i></span>
-                            <div class="input-group-append">
-                                <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown"
-                                        aria-haspopup="true"
-                                        aria-expanded="false">Category
-                                </button>
-
-                                <div class="dropdown-menu">
-                                    {% for category in categories %}
-                                    <a class="dropdown-item" href="javascript:void(0)">{{ category.name}}</a>
-                                    {% endfor %}
-                                </div>
-                            </div>
-                        </div>
-                    </form>
-                    <!-- /search box -->
 
                     <!-- Header Menu Wrapper -->
                     <div class="dt-nav-wrapper">
@@ -310,7 +289,7 @@
 
                                     <!-- Card Heading -->
                                     <div class="dt-card__heading">
-                                        <h3 class="dt-card__title">Latest Items</h3>
+                                        <h3 class="dt-card__title">CATEGORIES</h3>
 
                                     </div>
                                     <!-- /card heading -->
@@ -437,18 +416,22 @@
                                             <div class="media media-news">
 
                                                 <!-- Image -->
-                                                <img style="width: 80px;" class="img-fluid rounded-xl order-sm-2 ml-sm-10"
+                                                <img class="img-fluid rounded-xl order-sm-2 ml-sm-10"
                                                      src="{{item.url}}"
-                                                     alt="Currency">
+                                                     alt="">
                                                 <!-- /image -->
 
                                                 <!-- Media Body -->
                                                 <div class="media-body order-sm-1">
-                                                    <h4 class="mb-2">Item: {{item.name}}</h4>
+                                                    <h4 class="mb-2">{{item.name}}</h4>
                                                     <h5><a href="{{url_for('item', category_id = category.id)}}">Category: {{category.name}}</a></h5>
                                                     <p class="mb-5">
-                                                        {{item.description}}
+                                                        {{item.description[:500]}}...  <a class="d-inline-block font-weight-500 align-middle" href="{{url_for('item', category_id = category.id)}}">
+                                                            <span>Read Full Description</span>
+                                                            <i class="icon icon-arrow-long-right icon-lg ml-1"></i>
+                                                        </a>
                                                     </p>
+
                                                 </div>
                                                 <!-- /media body -->
 
@@ -494,24 +477,26 @@
 <!-- /root -->
 {% endblock %}
 <!-- Optional JavaScript -->
-<script src="../static/jquery.min.js"></script>
-<script src="../static/moment.js"></script>
-<script src="../static/bootstrap.bundle.min.js"></script>
+<script src="{{url_for('static', filename='jquery.min.js')}}"></script>
+<script src="{{url_for('static', filename='moment.js')}}"></script>
+<script src="{{url_for('static', filename='bootstrap.bundle.min.js')}}"></script>
 <!-- Perfect Scrollbar jQuery -->
-<script src="../static/perfect-scrollbar.min.js"></script>
+<script src="{{url_for('static', filename='perfect-scrollbar.min.js')}}"></script>
 <!-- /perfect scrollbar jQuery -->
 
 <!-- masonry script -->
-<script src="../static/masonry.pkgd.min.js"></script>
-<script src="../static/sweetalert2.js"></script>
-<script src="../static/js/functions.js"></script>
-<script src="../static/js/customizer.js"></script><!-- Custom JavaScript -->
-<script src="../static/chartist.min.js"></script>
-<script src="../static/owl.carousel.min.js"></script>
-<script src="../static/js/script.js"></script>
-<script src="../static/js/custom/charts/dashboard-listing.js"></script>
+<script src="{{url_for('static', filename='masonry.pkgd.min.js')}}"></script>
+<script src="{{url_for('static', filename='sweetalert2.js')}}"></script>
+<script src="{{url_for('static', filename='js/functions.js')}}"></script>
+<script src="{{url_for('static', filename='js/customizer.js')}}"></script><!-- Custom JavaScript -->
+<script src="{{url_for('static', filename='chartist.min.js')}}"></script>
+<script src="{{url_for('static', filename='owl.carousel.min.js')}}"></script>
+<script src="{{url_for('static', filename='js/script.js')}}"></script>
+<script src="{{url_for('static', filename='js/custom/charts/dashboard-listing.js')}}"></script>
+
+
+
 
 </body>
 
-<!-- Mirrored from drift.g-axon.work/html-bs4/default/index.html by HTTrack Website Copier/3.x [XR&CO'2014], Mon, 10 Jun 2019 19:14:41 GMT -->
 </html>

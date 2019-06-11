@@ -10,7 +10,7 @@
 
         <!-- Page Header -->
         <div class="dt-page__header">
-            <h1 class="dt-page__title">Add Category</h1>
+            <h1 class="dt-page__title">Add Item to {{category.name}}</h1>
         </div>
         <!-- /page header -->
 
@@ -41,7 +41,7 @@
                             <div class="form-group">
                                 <label for="email-1">Item Image Url</label>
                                 <input name="url" class="form-control" aria-describedby="emailHelp1"
-                                       required placeholder="Enter Image Url">
+                                       placeholder="Enter Image Url">
                             </div>
                             <!-- /form group -->
 
@@ -59,7 +59,7 @@
                             <!-- Form Group -->
                             <div class="form-group mb-0">
                                 <button type="submit" class="btn btn-primary text-uppercase">Add Item</button>
-                                <span class="d-inline-block ml-4"><a href="/">Cancel</a></span>
+                                <span class="d-inline-block ml-4"><a href="{{url_for('item', category_id = category.id)}}">Cancel</a></span>
                             </div>
                             <!-- /form group -->
 
