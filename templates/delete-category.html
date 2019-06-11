@@ -9,7 +9,7 @@
 
         <!-- Page Header -->
         <div class="dt-page__header">
-            <h1 class="dt-page__title">Add Category</h1>
+            <h1 class="dt-page__title">Edit Category</h1>
         </div>
         <!-- /page header -->
 
@@ -26,19 +26,17 @@
                     <div class="dt-card__body">
 
                         <!-- Form -->
-                        <form action="{{url_for('new_category')}}" method="post">
+                        <form action="{{url_for('delete_category', category_id=category.id)}}" method="post">
 
                             <!-- Form Group -->
                             <div class="form-group">
-                                <label for="email-1">Category Name</label>
-                                <input name="name" class="form-control" id="email-1" aria-describedby="emailHelp1"
-                                       required placeholder="Enter Category Name">
+                                <label style="width: 100%">Are you sure you want to delete <strong>{{category.name}}?</strong></label>
                             </div>
                             <!-- /form group -->
 
                             <!-- Form Group -->
                             <div class="form-group mb-0">
-                                <button type="submit" class="btn btn-primary text-uppercase">Add Category</button>
+                                <button type="submit" class="btn btn-primary text-uppercase">Delete Category</button>
                                 <span class="d-inline-block ml-4"><a href="/">Cancel</a></span>
                             </div>
                             <!-- /form group -->

@@ -123,19 +123,61 @@ def category():
     return render_template('category.html')
 
 
-@app.route('/category/<int:category_id>/edit')
+@app.route('/<int:category_id>/edit', methods=['POST', 'GET'])
+@login_required
 def edit_category(category_id):
-    return "edit category"
+    db_session = start()
+
+    category = db_session.query(Category).filter(Category.id == category_id).one()
+
+    if request.method == 'POST':
+        category.name = request.form['name']
+        db_session.commit()
+        db_session.close()
+        flashes.append("Category Updated")
+        flash("Category Updated")
+        return redirect(url_for('home'))
+
+    db_session.close()
+    return render_template('edit-category.html', user=current_user, category=category)
 
 
-@app.route('/new')
+@app.route('/new', methods=['GET', 'POST'])
+@login_required
 def new_category():
+    db_session = start()
+
+    if request.method == 'POST':
+        category = Category(name=request.form['name'])
+        print(category.name)
+        db_session.add(category)
+        db_session.commit()
+        db_session.close()
+        flashes.append('New Category Added')
+        flash("New Category Added")
+        return redirect(url_for('home'))
+
+    db_session.close()
     return render_template('new-category.html', user=current_user)
 
 
-@app.route('/category/<int:category_id>/delete')
+@app.route('/<int:category_id>/delete', methods=['GET', 'POST'])
+@login_required
 def delete_category(category_id):
-    return "delete category"
+    db_session = start()
+
+    category = db_session.query(Category).filter(Category.id == category_id).one()
+
+    if request.method == 'POST':
+        db_session.delete(category)
+        db_session.commit()
+        db_session.close()
+        flashes.append("{} Deleted".format(category.name))
+        flash("{} Deleted".format(category.name))
+        return redirect(url_for('home'))
+
+    db_session.close()
+    return render_template('delete-category.html', user=current_user, category=category)
 
 
 @app.route('/category/<int:category_id>/')

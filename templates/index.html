@@ -70,11 +70,11 @@
                 <!-- Brand -->
                 <div class="dt-brand">
 
-                    <!-- Brand tool -->
-                    <div class="dt-brand__tool" data-toggle="main-sidebar">
-                        <div class="hamburger-inner"></div>
-                    </div>
-                    <!-- /brand tool -->
+<!--                    &lt;!&ndash; Brand tool &ndash;&gt;-->
+<!--                    <div class="dt-brand__tool" data-toggle="main-sidebar">-->
+<!--                        <div class="hamburger-inner"></div>-->
+<!--                    </div>-->
+<!--                    &lt;!&ndash; /brand tool &ndash;&gt;-->
 
                     <!-- Brand logo -->
                     <span class="dt-brand__logo">
@@ -279,103 +279,6 @@
         <!-- Site Main -->
         <main class="dt-main">
             <!-- Sidebar -->
-            <aside id="main-sidebar" class="dt-sidebar">
-                <div class="dt-sidebar__container">
-
-                    <!-- Sidebar Navigation -->
-                    <ul class="dt-side-nav">
-
-                        <!-- Menu Header -->
-                        <li class="dt-side-nav__item dt-side-nav__header">
-                            <span class="dt-side-nav__text">main</span>
-                        </li>
-                        <!-- /menu header -->
-
-                        <!-- Menu Item -->
-                        <li class="dt-side-nav__item open">
-                            <a href="javascript:void(0)" class="dt-side-nav__link dt-side-nav__arrow" title="Dashboard">
-                                <i class="icon icon-dashboard icon-fw icon-lg"></i>
-                                <span class="dt-side-nav__text">Dashboard</span>
-                            </a>
-
-                            <!-- Sub-menu -->
-                            <ul class="dt-side-nav__sub-menu">
-                                <li class="dt-side-nav__item">
-                                    <a href="index.php" class="dt-side-nav__link" title="Listing">
-                                        <i class="icon icon-list icon-fw icon-lg"></i>
-                                        <span class="dt-side-nav__text">Listing</span>
-                                    </a>
-                                </li>
-
-                                <li class="dt-side-nav__item">
-                                    <a href="dashboard-real-estate.php" class="dt-side-nav__link" title="Real Estate">
-                                        <i class="icon icon-company icon-fw icon-lg"></i>
-                                        <span class="dt-side-nav__text">Real Estate</span>
-                                    </a>
-                                </li>
-
-                                <li class="dt-side-nav__item">
-                                    <a href="../dump/dashboard-crypto.html" class="dt-side-nav__link" title="Crypto">
-                                        <i class="icon icon-crypto icon-fw icon-lg"></i>
-                                        <span class="dt-side-nav__text">Crypto</span>
-                                    </a>
-                                </li>
-
-                                <li class="dt-side-nav__item">
-                                    <a href="../dump/dashboard-crm.html" class="dt-side-nav__link" title="CRM">
-                                        <i class="icon icon-crm icon-fw icon-lg"></i>
-                                        <span class="dt-side-nav__text">Crm</span>
-                                    </a>
-                                </li>
-                            </ul>
-                            <!-- /sub-menu -->
-
-                        </li>
-                        <li class="dt-side-nav__item">
-                            <a href="javascript:void(0)" class="dt-side-nav__link dt-side-nav__arrow" title="Widgets">
-                                <i class="icon icon-widgets icon-fw icon-lg"></i>
-                                <span class="dt-side-nav__text">Widgets</span>
-                            </a>
-
-                            <!-- Sub-menu -->
-                            <ul class="dt-side-nav__sub-menu">
-                                <li class="dt-side-nav__item">
-                                    <a href="../dump/widget.html" class="dt-side-nav__link" title="Classic">
-                                        <i class="icon icon-components icon-fw icon-lg"></i>
-                                        <span class="dt-side-nav__text">Classic</span>
-                                    </a>
-                                </li>
-
-
-                                <li class="dt-side-nav__item">
-                                    <a href="../dump/widget-new.html" class="dt-side-nav__link" title="Modern">
-                                        <i class="icon icon-datatable icon-fw icon-lg"></i>
-                                        <span class="dt-side-nav__text">Modern</span>
-                                    </a>
-                                </li>
-                            </ul>
-                            <!-- /sub-menu -->
-
-                        </li>
-                        <li class="dt-side-nav__item">
-                            <a href="../dump/metrics.html" class="dt-side-nav__link" title="Metrics">
-                                <i class="icon icon-metrics icon-fw icon-lg"></i>
-                                <span class="dt-side-nav__text">Metrics</span>
-                            </a>
-                        </li>
-                        <li class="dt-side-nav__item">
-                            <a href="../dump/layouts.html" class="dt-side-nav__link" title="Layouts">
-                                <i class="icon icon-layout icon-fw icon-lg"></i>
-                                <span class="dt-side-nav__text">Layouts</span>
-                            </a>
-                        </li>
-                        <!-- /menu item -->
-
-                    </ul>
-                    <!-- /sidebar navigation -->
-
-                </div>
-            </aside>
             {% endblock %}
             <!-- /sidebar -->
 <!-- Site Content Wrapper -->
@@ -404,101 +307,15 @@
 
                                     <!-- Card Heading -->
                                     <div class="dt-card__heading">
-                                        <h3 class="dt-card__title">Categories</h3>
-                                    </div>
-                                    <!-- /card heading -->
-
-                                    {% if user.is_authenticated %}
-                                    <!-- Card Tools -->
-                                    <div class="dt-card__tools">
-                                        <a href="{{url_for('new_category')}}" class="dt-card__more">
-                                            <i class="icon icon-circle-add-o mr-2"></i>Add New
-                                        </a>
-                                    </div>
-                                    <!-- /card tools -->
-                                    {% endif %}
-
-                                </div>
-                                <!-- /card header -->
-
-                                <!-- Card Body -->
-                                <div class="dt-card__body p-0">
-                                    <!-- Widget -->
-                                    <div class="dt-widget dt-widget-sm dt-widget-hover">
-
-                                        {% for category in categories %}
-                                        <!-- Widget Item -->
-                                        <div class="dt-widget__item">
-
-                                            <!-- Widget Image -->
-                                            <div class="dt-widget__img align-self-center">
-                                                <!-- Avatar -->
-                                                <i class="icon icon-ripple2 icon-fw icon-3x text-primary"></i>
-                                                <!-- /avatar -->
-                                            </div>
-                                            <!-- /widget image -->
-
-                                            <!-- Widget Info -->
-                                            <div class="dt-widget__info text-truncate">
-                                                <div class="dt-widget__title d-flex">
-                                                    <span class="f-16 font-weight-500">Ripple</span>
-                                                    <div class="trending-section text-success ml-2">
-                                                        <span class="value">2.3%</span>
-                                                        <i class="icon icon-pointer-up f-10"></i>
-                                                    </div>
-                                                </div>
-                                                <p class="mb-0 text-truncate text-light-gray">
-                                                    High: $129.00 Low: $129.00
-                                                </p>
-                                            </div>
-                                            <!-- /widget info -->
-
-                                            <!-- Widget Extra -->
-                                            <div class="dt-widget__extra text-right">
-                                                <!-- Hide Content -->
-                                                <div class="hide-content">
-                                                    <!-- Action Button Group -->
-                                                    <div class="action-btn-group">
-                                                        <button class="btn btn-primary btn-sm">Buy</button>
-                                                        <button class="btn btn-secondary btn-sm">Sell</button>
-                                                    </div>
-                                                    <!-- /action button group -->
-                                                </div>
-                                                <!-- /hide content -->
-                                            </div>
-                                            <!-- /widget extra -->
-
-                                        </div>
-                                        <!-- /widgets item -->
-                                        {% endfor %}
-
-
-
-                                    </div>
-                                    <!-- /widget -->
-                                </div>
-                                <!-- /card body -->
-
-                            </div>
-                            <!-- /card -->
-
-                        </div>
-                        <!-- /grid item -->
-
-                        <!-- Grid Item -->
-                        <div class="col-12">
-
-                            <!-- Card -->
-                            <div class="dt-card dt-card__full-height pb-4">
-
-                                <!-- Card Header -->
-                                <div class="dt-card__header mb-5">
-
-                                    <!-- Card Heading -->
-                                    <div class="dt-card__heading">
                                         <h3 class="dt-card__title">Latest Items</h3>
+
                                     </div>
                                     <!-- /card heading -->
+                                    {% if user.is_authenticated %}
+
+                                        <a href="{{url_for('new_category')}}" class="d-inline-block"><i
+                                                    class="icon icon-circle-add-o mr-2"></i>Add New</a>
+                                        {% endif %}
                                 </div>
                                 <!-- /card header -->
 
@@ -522,30 +339,25 @@
                                             <!-- Widget Info -->
                                             <div class="dt-widget__info text-truncate">
                                                 <div class="dt-widget__title d-flex">
-                                                    <span class="f-16 font-weight-500">Ripple</span>
-                                                    <div class="trending-section text-success ml-2">
-                                                        <span class="value">2.3%</span>
-                                                        <i class="icon icon-pointer-up f-10"></i>
-                                                    </div>
+                                                    <span class="f-16 font-weight-500">{{category.name}}</span>
                                                 </div>
-                                                <p class="mb-0 text-truncate text-light-gray">
-                                                    High: $129.00 Low: $129.00
-                                                </p>
                                             </div>
                                             <!-- /widget info -->
 
                                             <!-- Widget Extra -->
                                             <div class="dt-widget__extra text-right">
                                                 <!-- Hide Content -->
-                                                <div class="hide-content">
+                                                {% if user.is_authenticated %}
+                                                <div>
                                                     <!-- Action Button Group -->
                                                     <div class="action-btn-group">
-                                                        <button class="btn btn-primary btn-sm">Buy</button>
-                                                        <button class="btn btn-secondary btn-sm">Sell</button>
+                                                        <button class="btn btn-primary btn-sm"><a style="color: white" href="{{url_for('edit_category', category_id=category.id)}}"> Edit </a></button>
+                                                        <button class="btn btn-secondary btn-sm"><a style="color: white" href="{{url_for('delete_category', category_id=category.id)}}"> Delete </a></button>
                                                     </div>
                                                     <!-- /action button group -->
                                                 </div>
                                                 <!-- /hide content -->
+                                                {% endif %}
                                             </div>
                                             <!-- /widget extra -->
 
@@ -605,26 +417,18 @@
                                     <ul class="card-header-tabs nav nav-tabs nav-tabs-sm nav-scroll mx-0"
                                         role="tablist">
                                         <li class="nav-item">
-                                            <a class="nav-link active" data-toggle="tab" href="#all"
-                                               role="tab"
+                                            <a class="nav-link active" data-toggle="tab" href="#all" role="tab"
                                                aria-controls="all"
-                                               aria-selected="true">Popular</a>
+                                               aria-selected="true">All</a>
                                         </li>
+                                        {% for category in categories %}
                                         <li class="nav-item">
-                                            <a class="nav-link" data-toggle="tab" href="#bitcoin" role="tab"
-                                               aria-controls="bitcoin"
-                                               aria-selected="true">Bitcoin</a>
+                                            <a class="nav-link" data-toggle="tab" href="#{{category.name}}"
+                                               role="tab"
+                                               aria-controls="{{category.name}}"
+                                               aria-selected="true">{{category.name}}</a>
                                         </li>
-                                        <li class="nav-item">
-                                            <a class="nav-link" data-toggle="tab" href="#litecoin" role="tab"
-                                               aria-controls="litecoin"
-                                               aria-selected="true">Litecoin</a>
-                                        </li>
-                                        <li class="nav-item">
-                                            <a class="nav-link" data-toggle="tab" href="#crypto" role="tab"
-                                               aria-controls="crypto"
-                                               aria-selected="true">Crypto</a>
-                                        </li>
+                                        {% endfor %}
                                     </ul>
                                 </div>
                                 <!-- /card header -->
