@@ -11,7 +11,7 @@
     <meta name="keywords"
           content="Responsive, HTML5, admin theme, business, professional, jQuery, web design, CSS3, sass">
     <!-- /meta tags -->
-    <title>Drift - Admin Template</title>
+    <title>{% block title%}Catalog{% endblock %}</title>
 
     <!-- Site favicon -->
     <link rel="shortcut icon" href="../static/images/favicon.ico" type="image/x-icon">
@@ -70,16 +70,16 @@
                 <!-- Brand -->
                 <div class="dt-brand">
 
-<!--                    &lt;!&ndash; Brand tool &ndash;&gt;-->
-<!--                    <div class="dt-brand__tool" data-toggle="main-sidebar">-->
-<!--                        <div class="hamburger-inner"></div>-->
-<!--                    </div>-->
-<!--                    &lt;!&ndash; /brand tool &ndash;&gt;-->
+                    <!--                    &lt;!&ndash; Brand tool &ndash;&gt;-->
+                    <!--                    <div class="dt-brand__tool" data-toggle="main-sidebar">-->
+                    <!--                        <div class="hamburger-inner"></div>-->
+                    <!--                    </div>-->
+                    <!--                    &lt;!&ndash; /brand tool &ndash;&gt;-->
 
                     <!-- Brand logo -->
                     <span class="dt-brand__logo">
         <a class="dt-brand__logo-link" href="/">
-          <img class="dt-brand__logo-img d-none d-sm-inline-block" src="../static/images/logo.png" alt="Drift">
+          <img style="width: 85px" class=" d-none d-sm-inline-block" src="../static/images/logo.png" alt="Drift">
           <img class="dt-brand__logo-symbol d-sm-none" src="../static/images/logo-symbol.png" alt="Drift">
         </a>
       </span>
@@ -178,7 +178,8 @@
 
                                                 <!-- Avatar -->
                                                 <img class="dt-avatar mr-3"
-                                                     src="https://png.pngtree.com/svg/20161130/a50ce51c9e.svg" alt="User">
+                                                     src="https://png.pngtree.com/svg/20161130/a50ce51c9e.svg"
+                                                     alt="User">
                                                 <!-- avatar -->
 
                                                 <!-- Media Body -->
@@ -232,9 +233,11 @@
                                 <!-- Dropdown Option -->
                                 <div class="dropdown-menu dropdown-menu-right">
                                     <div class="dt-avatar-wrapper flex-nowrap p-6 mt-n2 bg-gradient-purple text-white rounded-top">
+                                        {% if user.picture %}
                                         <img class="dt-avatar" src="{{user.picture}}"
                                              alt="">
                                         <span class="dt-avatar-info">
+                                        {% endif %}
                   <span class="dt-avatar-name">{{user.name}}</span>
                   <span class="f-12">{{user.email}}</span>
                 </span>
@@ -249,13 +252,13 @@
                         </ul>
                         <!-- /header menu -->
                         {% else %}
-                         <!-- Header Login Menu -->
+                        <!-- Header Login Menu -->
                         <ul class="dt-nav">
                             <li class="dt-nav__item dropdown">
 
                                 <!-- Dropdown Link -->
                                 <a href="{{url_for('login')}}" class="dt-nav__link no-arrow dt-avatar-wrapper"
-                                    aria-haspopup="true" aria-expanded="false">
+                                   aria-haspopup="true" aria-expanded="false">
                                     <span class="dt-avatar-info d-none d-sm-block">
                 <span class="dt-avatar-name">Login</span>
               </span> </a>
@@ -281,7 +284,7 @@
             <!-- Sidebar -->
             {% endblock %}
             <!-- /sidebar -->
-<!-- Site Content Wrapper -->
+            <!-- Site Content Wrapper -->
             <div class="dt-content-wrapper">
 
                 <!-- Site Content -->
@@ -313,9 +316,9 @@
                                     <!-- /card heading -->
                                     {% if user.is_authenticated %}
 
-                                        <a href="{{url_for('new_category')}}" class="d-inline-block"><i
-                                                    class="icon icon-circle-add-o mr-2"></i>Add New</a>
-                                        {% endif %}
+                                    <a href="{{url_for('new_category')}}" class="d-inline-block"><i
+                                            class="icon icon-circle-add-o mr-2"></i>Add New</a>
+                                    {% endif %}
                                 </div>
                                 <!-- /card header -->
 
@@ -339,7 +342,7 @@
                                             <!-- Widget Info -->
                                             <div class="dt-widget__info text-truncate">
                                                 <div class="dt-widget__title d-flex">
-                                                    <span class="f-16 font-weight-500">{{category.name}}</span>
+                                                    <span class="f-16 font-weight-500"><a href="{{url_for('item', category_id = category.id)}}">{{category.name}}</a></span>
                                                 </div>
                                             </div>
                                             <!-- /widget info -->
@@ -351,8 +354,12 @@
                                                 <div>
                                                     <!-- Action Button Group -->
                                                     <div class="action-btn-group">
-                                                        <button class="btn btn-primary btn-sm"><a style="color: white" href="{{url_for('edit_category', category_id=category.id)}}"> Edit </a></button>
-                                                        <button class="btn btn-secondary btn-sm"><a style="color: white" href="{{url_for('delete_category', category_id=category.id)}}"> Delete </a></button>
+                                                        <button class="btn btn-primary btn-sm"><a style="color: white"
+                                                                                                  href="{{url_for('edit_category', category_id=category.id)}}">
+                                                            Edit </a></button>
+                                                        <button class="btn btn-secondary btn-sm"><a style="color: white"
+                                                                                                    href="{{url_for('delete_category', category_id=category.id)}}">
+                                                            Delete </a></button>
                                                     </div>
                                                     <!-- /action button group -->
                                                 </div>
@@ -364,7 +371,6 @@
                                         </div>
                                         <!-- /widgets item -->
                                         {% endfor %}
-
 
 
                                     </div>
@@ -406,723 +412,84 @@
                                 <!-- Card header -->
                                 <div class="card-header card-nav border-bottom-0">
                                     <div class="d-flex align-items-center justify-content-between mb-4">
-                                        <h3 class="dt-card__title">Latest News</h3>
-                                        {% if user.is_authenticated %}
-
-                                        <a href="javascript:void(0)" class="d-inline-block"><i
-                                                    class="icon icon-circle-add-o mr-2"></i>Add New</a>
-                                        {% endif %}
+                                        <h3 class="dt-card__title">Latest Items</h3>
                                     </div>
 
-                                    <ul class="card-header-tabs nav nav-tabs nav-tabs-sm nav-scroll mx-0"
-                                        role="tablist">
-                                        <li class="nav-item">
-                                            <a class="nav-link active" data-toggle="tab" href="#all" role="tab"
-                                               aria-controls="all"
-                                               aria-selected="true">All</a>
-                                        </li>
-                                        {% for category in categories %}
-                                        <li class="nav-item">
-                                            <a class="nav-link" data-toggle="tab" href="#{{category.name}}"
-                                               role="tab"
-                                               aria-controls="{{category.name}}"
-                                               aria-selected="true">{{category.name}}</a>
-                                        </li>
-                                        {% endfor %}
-                                    </ul>
                                 </div>
                                 <!-- /card header -->
 
-                                <!-- Tab Content-->
-                                <div class="tab-content">
+                                <!-- Tab panel -->
 
-                                    <!-- Tab panel -->
-                                    <div id="all" class="tab-pane active">
+                                <div class="tab-pane">
 
-                                        <!-- Card Body -->
-                                        <div class="card-body">
+                                    <!-- Card Body -->
+                                    <div class="card-body">
 
-                                            <!-- Media List -->
-                                            <div class="media-list media-separator">
-                                                <!-- Media -->
-                                                <div class="media media-news">
+                                        <!-- Media List -->
+                                        <div class="media-list media-separator">
+                                            <!-- Media -->
+                                            {% for item in items %}
+                                            {% for category in categories %}
+                                            {% if item.category_id == category.id %}
+                                            <div class="media media-news">
 
-                                                    <!-- Image -->
-                                                    <img class="img-fluid rounded-xl order-sm-2 ml-sm-10"
-                                                         src="../static/images/dashboard/bitcoin-1.jpg" alt="Currency">
-                                                    <!-- /image -->
-
-                                                    <!-- Media Body -->
-                                                    <div class="media-body order-sm-1">
-                                                        <h4 class="mb-2">5 Steps to consider before bying Bitcoins</h4>
-                                                        <p class="mb-5">
-                                                            Cras tincidunt sit amet massa at accumsan. Mauris tincidunt
-                                                            tincidunt est, et pulvinar
-                                                            felis pharetra in vestibulum sed.
-                                                        </p>
-                                                        <div class="text-light-gray mb-2">
-                                                            <i class="icon icon-tag icon-lg mr-2 align-top"></i>
-                                                            BTC, Crypto, Trading, Tips, Cryptocurrency
-                                                        </div>
-
-                                                        <a class="d-inline-block font-weight-500 align-middle"
-                                                           href="javascript:void(0)">
-                                                            <span>Ready Full Story</span>
-                                                            <i class="icon icon-arrow-long-right icon-lg ml-1"></i>
-                                                        </a>
-                                                    </div>
-                                                    <!-- /media body -->
-
-                                                </div>
-                                                <!-- /media -->
-                                                <!-- Media -->
-                                                <div class="media media-news">
-
-                                                    <!-- Image -->
-                                                    <img class="img-fluid rounded-xl order-sm-2 ml-sm-10"
-                                                         src="../static/images/dashboard/bitcoin-2.jpg" alt="Currency">
-                                                    <!-- /image -->
-
-                                                    <!-- Media Body -->
-                                                    <div class="media-body order-sm-1">
-                                                        <h4 class="mb-2">How online conversion works for crypto currency?</h4>
-                                                        <p class="mb-5">
-                                                            Cras tincidunt sit amet massa at accumsan. Mauris tincidunt
-                                                            tincidunt est, et pulvinar
-                                                            felis pharetra in vestibulum sed.
-                                                        </p>
-                                                        <div class="text-light-gray mb-2">
-                                                            <i class="icon icon-tag icon-lg mr-2 align-top"></i>
-                                                            BTC, Crypto, Trading, Tips, Cryptocurrency
-                                                        </div>
-
-                                                        <a class="d-inline-block font-weight-500 align-middle"
-                                                           href="javascript:void(0)">
-                                                            <span>Ready Full Story</span>
-                                                            <i class="icon icon-arrow-long-right icon-lg ml-1"></i>
-                                                        </a>
-                                                    </div>
-                                                    <!-- /media body -->
-
-                                                </div>
-                                                <!-- /media -->
-                                                <!-- Media -->
-                                                <div class="media media-news">
-
-                                                    <!-- Image -->
-                                                    <img class="img-fluid rounded-xl order-sm-2 ml-sm-10"
-                                                         src="../static/images/dashboard/bitcoin-3.jpg" alt="Currency">
-                                                    <!-- /image -->
-
-                                                    <!-- Media Body -->
-                                                    <div class="media-body order-sm-1">
-                                                        <h4 class="mb-2">Lock your crypto with top 5 wallets.</h4>
-                                                        <p class="mb-5">
-                                                            Cras tincidunt sit amet massa at accumsan. Mauris tincidunt
-                                                            tincidunt est, et pulvinar
-                                                            felis pharetra in vestibulum sed.
-                                                        </p>
-                                                        <div class="text-light-gray mb-2">
-                                                            <i class="icon icon-tag icon-lg mr-2 align-top"></i>
-                                                            BTC, Crypto, Trading, Tips, Cryptocurrency
-                                                        </div>
-
-                                                        <a class="d-inline-block font-weight-500 align-middle"
-                                                           href="javascript:void(0)">
-                                                            <span>Ready Full Story</span>
-                                                            <i class="icon icon-arrow-long-right icon-lg ml-1"></i>
-                                                        </a>
-                                                    </div>
-                                                    <!-- /media body -->
-
-                                                </div>
-                                                <!-- /media -->
                                             </div>
-                                            <!-- /media list -->
+                                            <div class="media media-news">
 
+                                                <!-- Image -->
+                                                <img style="width: 80px;" class="img-fluid rounded-xl order-sm-2 ml-sm-10"
+                                                     src="{{item.url}}"
+                                                     alt="Currency">
+                                                <!-- /image -->
+
+                                                <!-- Media Body -->
+                                                <div class="media-body order-sm-1">
+                                                    <h4 class="mb-2">Item: {{item.name}}</h4>
+                                                    <h5><a href="{{url_for('item', category_id = category.id)}}">Category: {{category.name}}</a></h5>
+                                                    <p class="mb-5">
+                                                        {{item.description}}
+                                                    </p>
+                                                </div>
+                                                <!-- /media body -->
+
+                                            </div>
+                                            <!-- /media -->
+                                            <!-- Media -->
+                                            {% endif %}
+                                            {% endfor %}
+                                            {% endfor %}
+                                            <!-- /media -->
                                         </div>
-                                        <!-- /card body -->
+                                        <!-- /media list -->
 
                                     </div>
-                                    <!-- /tab panel -->
-
-                                    <!-- Tab panel -->
-                                    <div id="bitcoin" class="tab-pane">
-
-                                        <!-- Card Body -->
-                                        <div class="card-body">
-
-                                            <!-- Media List -->
-                                            <div class="media-list media-separator">
-                                                <!-- Media -->
-                                                <div class="media media-news">
-
-                                                    <!-- Image -->
-                                                    <img class="img-fluid rounded-xl order-sm-2 ml-sm-10"
-                                                         src="../static/images/dashboard/bitcoin-cryptocurrency-trader.jpg"
-                                                         alt="Currency">
-                                                    <!-- /image -->
-
-                                                    <!-- Media Body -->
-                                                    <div class="media-body order-sm-1">
-                                                        <h4 class="mb-2">5 Steps to consider before bying Bitcoins</h4>
-                                                        <p class="mb-5">
-                                                            Cras tincidunt sit amet massa at accumsan. Mauris tincidunt
-                                                            tincidunt est, et pulvinar
-                                                            felis pharetra in vestibulum sed.
-                                                        </p>
-                                                        <div class="text-light-gray mb-2">
-                                                            <i class="icon icon-tag icon-lg mr-2 align-top"></i>
-                                                            BTC, Crypto, Trading, Tips, Cryptocurrency
-                                                        </div>
-
-                                                        <a class="d-inline-block font-weight-500 align-middle"
-                                                           href="javascript:void(0)">
-                                                            <span>Ready Full Story</span>
-                                                            <i class="icon icon-arrow-long-right icon-lg ml-1"></i>
-                                                        </a>
-                                                    </div>
-                                                    <!-- /media body -->
-
-                                                </div>
-                                                <!-- /media -->
-                                                <!-- Media -->
-                                                <div class="media media-news">
-
-                                                    <!-- Image -->
-                                                    <img class="img-fluid rounded-xl order-sm-2 ml-sm-10"
-                                                         src="../static/images/dashboard/concept-of-blockchain.jpg"
-                                                         alt="Currency">
-                                                    <!-- /image -->
-
-                                                    <!-- Media Body -->
-                                                    <div class="media-body order-sm-1">
-                                                        <h4 class="mb-2">How online conversion works for crypto currency?</h4>
-                                                        <p class="mb-5">
-                                                            Cras tincidunt sit amet massa at accumsan. Mauris tincidunt
-                                                            tincidunt est, et pulvinar
-                                                            felis pharetra in vestibulum sed.
-                                                        </p>
-                                                        <div class="text-light-gray mb-2">
-                                                            <i class="icon icon-tag icon-lg mr-2 align-top"></i>
-                                                            BTC, Crypto, Trading, Tips, Cryptocurrency
-                                                        </div>
-
-                                                        <a class="d-inline-block font-weight-500 align-middle"
-                                                           href="javascript:void(0)">
-                                                            <span>Ready Full Story</span>
-                                                            <i class="icon icon-arrow-long-right icon-lg ml-1"></i>
-                                                        </a>
-                                                    </div>
-                                                    <!-- /media body -->
-
-                                                </div>
-                                                <!-- /media -->
-                                                <!-- Media -->
-                                                <div class="media media-news">
-
-                                                    <!-- Image -->
-                                                    <img class="img-fluid rounded-xl order-sm-2 ml-sm-10"
-                                                         src="../static/images/dashboard/bitcoin-in-the-mousetrap.jpg"
-                                                         alt="Currency">
-                                                    <!-- /image -->
-
-                                                    <!-- Media Body -->
-                                                    <div class="media-body order-sm-1">
-                                                        <h4 class="mb-2">Lock your crypto with top 5 wallets.</h4>
-                                                        <p class="mb-5">
-                                                            Cras tincidunt sit amet massa at accumsan. Mauris tincidunt
-                                                            tincidunt est, et pulvinar
-                                                            felis pharetra in vestibulum sed.
-                                                        </p>
-                                                        <div class="text-light-gray mb-2">
-                                                            <i class="icon icon-tag icon-lg mr-2 align-top"></i>
-                                                            BTC, Crypto, Trading, Tips, Cryptocurrency
-                                                        </div>
-
-                                                        <a class="d-inline-block font-weight-500 align-middle"
-                                                           href="javascript:void(0)">
-                                                            <span>Ready Full Story</span>
-                                                            <i class="icon icon-arrow-long-right icon-lg ml-1"></i>
-                                                        </a>
-                                                    </div>
-                                                    <!-- /media body -->
-
-                                                </div>
-                                                <!-- /media -->
-                                            </div>
-                                            <!-- /media list -->
-
-                                        </div>
-                                        <!-- /card body -->
-
-                                    </div>
-                                    <!-- /tab panel -->
-
-                                    <!-- Tab panel -->
-                                    <div id="litecoin" class="tab-pane">
-
-                                        <!-- Card Body -->
-                                        <div class="card-body">
-
-                                            <!-- Media List -->
-                                            <div class="media-list media-separator">
-                                                <!-- Media -->
-                                                <div class="media media-news">
-
-                                                    <!-- Image -->
-                                                    <img class="img-fluid rounded-xl order-sm-2 ml-sm-10"
-                                                         src="../static/images/dashboard/bitcoin-3.jpg" alt="Currency">
-                                                    <!-- /image -->
-
-                                                    <!-- Media Body -->
-                                                    <div class="media-body order-sm-1">
-                                                        <h4 class="mb-2">Lock your crypto with top 5 wallets.</h4>
-                                                        <p class="mb-5">
-                                                            Cras tincidunt sit amet massa at accumsan. Mauris tincidunt
-                                                            tincidunt est, et pulvinar
-                                                            felis pharetra in vestibulum sed.
-                                                        </p>
-                                                        <div class="text-light-gray mb-2">
-                                                            <i class="icon icon-tag icon-lg mr-2 align-top"></i>
-                                                            BTC, Crypto, Trading, Tips, Cryptocurrency
-                                                        </div>
-
-                                                        <a class="d-inline-block font-weight-500 align-middle"
-                                                           href="javascript:void(0)">
-                                                            <span>Ready Full Story</span>
-                                                            <i class="icon icon-arrow-long-right icon-lg ml-1"></i>
-                                                        </a>
-                                                    </div>
-                                                    <!-- /media body -->
-
-                                                </div>
-                                                <!-- /media -->
-                                                <!-- Media -->
-                                                <div class="media media-news">
-
-                                                    <!-- Image -->
-                                                    <img class="img-fluid rounded-xl order-sm-2 ml-sm-10"
-                                                         src="../static/images/dashboard/bitcoin-1.jpg" alt="Currency">
-                                                    <!-- /image -->
-
-                                                    <!-- Media Body -->
-                                                    <div class="media-body order-sm-1">
-                                                        <h4 class="mb-2">5 Steps to consider before bying Bitcoins</h4>
-                                                        <p class="mb-5">
-                                                            Cras tincidunt sit amet massa at accumsan. Mauris tincidunt
-                                                            tincidunt est, et pulvinar
-                                                            felis pharetra in vestibulum sed.
-                                                        </p>
-                                                        <div class="text-light-gray mb-2">
-                                                            <i class="icon icon-tag icon-lg mr-2 align-top"></i>
-                                                            BTC, Crypto, Trading, Tips, Cryptocurrency
-                                                        </div>
-
-                                                        <a class="d-inline-block font-weight-500 align-middle"
-                                                           href="javascript:void(0)">
-                                                            <span>Ready Full Story</span>
-                                                            <i class="icon icon-arrow-long-right icon-lg ml-1"></i>
-                                                        </a>
-                                                    </div>
-                                                    <!-- /media body -->
-
-                                                </div>
-                                                <!-- /media -->
-                                                <!-- Media -->
-                                                <div class="media media-news">
-
-                                                    <!-- Image -->
-                                                    <img class="img-fluid rounded-xl order-sm-2 ml-sm-10"
-                                                         src="../static/images/dashboard/bitcoin-2.jpg" alt="Currency">
-                                                    <!-- /image -->
-
-                                                    <!-- Media Body -->
-                                                    <div class="media-body order-sm-1">
-                                                        <h4 class="mb-2">How online conversion works for crypto currency?</h4>
-                                                        <p class="mb-5">
-                                                            Cras tincidunt sit amet massa at accumsan. Mauris tincidunt
-                                                            tincidunt est, et pulvinar
-                                                            felis pharetra in vestibulum sed.
-                                                        </p>
-                                                        <div class="text-light-gray mb-2">
-                                                            <i class="icon icon-tag icon-lg mr-2 align-top"></i>
-                                                            BTC, Crypto, Trading, Tips, Cryptocurrency
-                                                        </div>
-
-                                                        <a class="d-inline-block font-weight-500 align-middle"
-                                                           href="javascript:void(0)">
-                                                            <span>Ready Full Story</span>
-                                                            <i class="icon icon-arrow-long-right icon-lg ml-1"></i>
-                                                        </a>
-                                                    </div>
-                                                    <!-- /media body -->
-
-                                                </div>
-                                                <!-- /media -->
-                                            </div>
-                                            <!-- /media list -->
-
-                                        </div>
-                                        <!-- /card body -->
-
-                                    </div>
-                                    <!-- /tab panel -->
-
-                                    <!-- Tab panel -->
-                                    <div id="crypto" class="tab-pane">
-
-                                        <!-- Card Body -->
-                                        <div class="card-body">
-
-                                            <!-- Media List -->
-                                            <div class="media-list media-separator">
-                                                <!-- Media -->
-                                                <div class="media media-news">
-
-                                                    <!-- Image -->
-                                                    <img class="img-fluid rounded-xl order-sm-2 ml-sm-10"
-                                                         src="../static/images/dashboard/bitcoin-in-the-mousetrap.jpg"
-                                                         alt="Currency">
-                                                    <!-- /image -->
-
-                                                    <!-- Media Body -->
-                                                    <div class="media-body order-sm-1">
-                                                        <h4 class="mb-2">Lock your crypto with top 5 wallets.</h4>
-                                                        <p class="mb-5">
-                                                            Cras tincidunt sit amet massa at accumsan. Mauris tincidunt
-                                                            tincidunt est, et pulvinar
-                                                            felis pharetra in vestibulum sed.
-                                                        </p>
-                                                        <div class="text-light-gray mb-2">
-                                                            <i class="icon icon-tag icon-lg mr-2 align-top"></i>
-                                                            BTC, Crypto, Trading, Tips, Cryptocurrency
-                                                        </div>
-
-                                                        <a class="d-inline-block font-weight-500 align-middle"
-                                                           href="javascript:void(0)">
-                                                            <span>Ready Full Story</span>
-                                                            <i class="icon icon-arrow-long-right icon-lg ml-1"></i>
-                                                        </a>
-                                                    </div>
-                                                    <!-- /media body -->
-
-                                                </div>
-                                                <!-- /media -->
-                                                <!-- Media -->
-                                                <div class="media media-news">
-
-                                                    <!-- Image -->
-                                                    <img class="img-fluid rounded-xl order-sm-2 ml-sm-10"
-                                                         src="../static/images/dashboard/bitcoin-cryptocurrency-trader.jpg"
-                                                         alt="Currency">
-                                                    <!-- /image -->
-
-                                                    <!-- Media Body -->
-                                                    <div class="media-body order-sm-1">
-                                                        <h4 class="mb-2">5 Steps to consider before bying Bitcoins</h4>
-                                                        <p class="mb-5">
-                                                            Cras tincidunt sit amet massa at accumsan. Mauris tincidunt
-                                                            tincidunt est, et pulvinar
-                                                            felis pharetra in vestibulum sed.
-                                                        </p>
-                                                        <div class="text-light-gray mb-2">
-                                                            <i class="icon icon-tag icon-lg mr-2 align-top"></i>
-                                                            BTC, Crypto, Trading, Tips, Cryptocurrency
-                                                        </div>
-
-                                                        <a class="d-inline-block font-weight-500 align-middle"
-                                                           href="javascript:void(0)">
-                                                            <span>Ready Full Story</span>
-                                                            <i class="icon icon-arrow-long-right icon-lg ml-1"></i>
-                                                        </a>
-                                                    </div>
-                                                    <!-- /media body -->
-
-                                                </div>
-                                                <!-- /media -->
-                                                <!-- Media -->
-                                                <div class="media media-news">
-
-                                                    <!-- Image -->
-                                                    <img class="img-fluid rounded-xl order-sm-2 ml-sm-10"
-                                                         src="../static/images/dashboard/concept-of-blockchain.jpg"
-                                                         alt="Currency">
-                                                    <!-- /image -->
-
-                                                    <!-- Media Body -->
-                                                    <div class="media-body order-sm-1">
-                                                        <h4 class="mb-2">How online conversion works for crypto currency?</h4>
-                                                        <p class="mb-5">
-                                                            Cras tincidunt sit amet massa at accumsan. Mauris tincidunt
-                                                            tincidunt est, et pulvinar
-                                                            felis pharetra in vestibulum sed.
-                                                        </p>
-                                                        <div class="text-light-gray mb-2">
-                                                            <i class="icon icon-tag icon-lg mr-2 align-top"></i>
-                                                            BTC, Crypto, Trading, Tips, Cryptocurrency
-                                                        </div>
-
-                                                        <a class="d-inline-block font-weight-500 align-middle"
-                                                           href="javascript:void(0)">
-                                                            <span>Ready Full Story</span>
-                                                            <i class="icon icon-arrow-long-right icon-lg ml-1"></i>
-                                                        </a>
-                                                    </div>
-                                                    <!-- /media body -->
-
-                                                </div>
-                                                <!-- /media -->
-                                            </div>
-                                            <!-- /media list -->
-
-                                        </div>
-                                        <!-- /card body -->
-
-                                    </div>
-                                    <!-- /tab panel -->
+                                    <!-- /card body -->
 
                                 </div>
-                                <!-- /tab content-->
+                                <!-- /tab panel -->
+
 
                             </div>
-                            <!-- /card -->
+                            <!-- /tab content-->
 
                         </div>
-                        <!-- /grid item -->
+                        <!-- /card -->
 
                     </div>
-                    <!-- /grid -->
+                    <!-- /grid item -->
 
                 </div>
-                <!-- /site content -->
+                <!-- /grid -->
 
-                <!-- Footer -->
-<footer class="dt-footer">
-  Copyright Company Name © 2019
-</footer>
-<!-- /footer -->
             </div>
-            <!-- /site content wrapper -->
-
-<!--            &lt;!&ndash; Theme Chooser &ndash;&gt;-->
-<!--<div class="dt-customizer-toggle" hidden="true">-->
-<!--  <a href="javascript:void(0)" data-toggle="customizer"> <i class="icon icon-customizer animation-customizer"></i> </a>-->
-<!--</div>-->
-<!--&lt;!&ndash; /theme chooser &ndash;&gt;-->
-
-<!-- Customizer Sidebar -->
-<aside class="dt-customizer dt-drawer position-right">
-  <div class="dt-customizer__inner">
-
-    <!-- Customizer Header -->
-    <div class="dt-customizer__header">
-
-      <!-- Customizer Title -->
-      <div class="dt-customizer__title">
-        <h3 class="mb-0">Theme Settings</h3>
-      </div>
-      <!-- /customizer title -->
-
-      <!-- Close Button -->
-      <button type="button" class="close" data-toggle="customizer">
-        <span aria-hidden="true">&times;</span>
-      </button>
-      <!-- /close button -->
-
+            <!-- /site content -->
+            <!-- Footer -->
+            <footer class="dt-footer" style="width: 100%; max-width: 100%">
+                Copyright Company Name © 2019
+            </footer></main>
+            <!-- /footer -->
     </div>
-    <!-- /customizer header -->
-
-    <!-- Customizer Body -->
-    <div class="dt-customizer__body ps-custom-scrollbar">
-      <!-- Customizer Body Inner  -->
-      <div class="dt-customizer__body-inner">
-
-        <!-- Section -->
-        <section>
-          <h4>Theme</h4>
-
-          <!-- List -->
-          <ul class="dt-list dt-list-sm" id="theme-chooser">
-            <li class="dt-list__item">
-              <div class="choose-option">
-                <a href="javascript:void(0)" class="choose-option__icon" data-theme="light">
-                  <img src="../static/images/customizer-icons/theme-light.png" alt="Light">
-                </a>
-                <span class="choose-option__name">Light</span>
-              </div>
-            </li>
-            <li class="dt-list__item">
-              <div class="choose-option">
-                <a href="javascript:void(0)" class="choose-option__icon" data-theme="semidark">
-                  <img src="../static/images/customizer-icons/theme-normal.png" alt="Normal">
-                </a>
-                <span class="choose-option__name">Semi-dark</span>
-              </div>
-            </li>
-            <li class="dt-list__item">
-              <div class="choose-option">
-                <a href="javascript:void(0)" class="choose-option__icon" data-theme="dark">
-                  <img src="../static/images/customizer-icons/theme-dark.png" alt="Dark">
-                </a>
-                <span class="choose-option__name">Dark</span>
-              </div>
-            </li>
-          </ul>
-          <!-- /list -->
-
-        </section>
-        <!-- /section -->
-
-        <!-- Section -->
-        <section>
-          <h4>Style</h4>
-
-          <!-- List -->
-          <ul class="dt-list dt-list-sm">
-            <li class="dt-list__item d-none d-lg-block">
-              <div class="choose-option">
-                <a href="javascript:void(0)" id="toggle-fixed-sidebar" class="choose-option__icon">
-                  <img src="../static/images/customizer-icons/fix-sidebar.png" alt="Fix Sidebar">
-                </a>
-                <span class="choose-option__name">Fix Sidebar</span>
-              </div>
-            </li>
-            <li class="dt-list__item">
-              <div class="choose-option">
-                <a href="javascript:void(0)" id="toggle-fixed-header" class="choose-option__icon">
-                  <img src="../static/images/customizer-icons/fix-header.png" alt="Fix Header">
-                </a>
-                <span class="choose-option__name">Fix Header</span>
-              </div>
-            </li>
-          </ul>
-          <!-- /list -->
-
-        </section>
-        <!-- /section -->
-
-        <!-- Section -->
-        <section id="theme-style-chooser">
-          <h4>Color</h4>
-
-          <!-- List -->
-          <ul class="dt-list dt-list-sm dt-color-options">
-            <li class="dt-list__item">
-              <span class="dt-color-option" data-style="style-1"></span>
-            </li>
-            <li class="dt-list__item">
-              <span class="dt-color-option" data-style="style-2"></span>
-            </li>
-            <li class="dt-list__item">
-              <span class="dt-color-option" data-style="style-3"></span>
-            </li>
-            <li class="dt-list__item">
-              <span class="dt-color-option" data-style="style-4"></span>
-            </li>
-            <li class="dt-list__item">
-              <span class="dt-color-option" data-style="style-5"></span>
-            </li>
-            <li class="dt-list__item">
-              <span class="dt-color-option" data-style="style-6"></span>
-            </li>
-            <li class="dt-list__item">
-              <span class="dt-color-option" data-style="style-7"></span>
-            </li>
-            <li class="dt-list__item">
-              <span class="dt-color-option" data-style="style-8"></span>
-            </li>
-            <li class="dt-list__item">
-              <span class="dt-color-option" data-style="style-9"></span>
-            </li>
-            <li class="dt-list__item">
-              <span class="dt-color-option" data-style="style-10"></span>
-            </li>
-          </ul>
-          <!-- /list -->
-
-        </section>
-        <!-- /section -->
-
-        <!-- Section -->
-        <section class="d-none d-lg-block" id="sidebar-layout">
-          <h4>Sidebar Layout</h4>
-
-          <!-- List -->
-          <ul class="dt-list dt-list-sm">
-            <li class="dt-list__item">
-              <div class="choose-option">
-                <a href="javascript:void(0)" class="choose-option__icon" id="sl-option1" data-value="folded">
-                  <img src="../static/images/customizer-icons/folded.png" alt="Folded">
-                </a>
-                <span class="choose-option__name">Folded</span>
-              </div>
-            </li>
-            <li class="dt-list__item">
-              <div class="choose-option">
-                <a href="javascript:void(0)" class="choose-option__icon" id="sl-option2" data-value="default">
-                  <img src="../static/images/customizer-icons/default.png" alt="Default">
-                </a>
-                <span class="choose-option__name">Default</span>
-              </div>
-            </li>
-            <li class="dt-list__item">
-              <div class="choose-option">
-                <a href="javascript:void(0)" class="choose-option__icon" id="sl-option3" data-value="drawer">
-                  <img src="../static/images/customizer-icons/drawer.png" alt="Drawer">
-                </a>
-                <span class="choose-option__name">Drawer</span>
-              </div>
-            </li>
-          </ul>
-          <!-- /list -->
-
-        </section>
-        <!-- /section -->
-
-        <!-- Section -->
-        <section class="d-none d-lg-block" id="layout-chooser">
-          <h4>Layout</h4>
-
-          <!-- List -->
-          <ul class="dt-list dt-list-sm">
-            <li class="dt-list__item">
-              <div class="choose-option">
-                <a href="javascript:void(0)" class="choose-option__icon" data-layout="framed">
-                  <img src="../static/images/customizer-icons/framed.png" alt="Framed">
-                </a>
-                <span class="choose-option__name">Framed</span>
-              </div>
-            </li>
-            <li class="dt-list__item">
-              <div class="choose-option">
-                <a href="javascript:void(0)" class="choose-option__icon" data-layout="full-width">
-                  <img src="../static/images/customizer-icons/full-width.png" alt="Full Width">
-                </a>
-                <span class="choose-option__name">Full Width</span>
-              </div>
-            </li>
-            <li class="dt-list__item">
-              <div class="choose-option">
-                <a href="javascript:void(0)" class="choose-option__icon" data-layout="boxed">
-                  <img src="../static/images/customizer-icons/boxed.png" alt="Boxed">
-                </a>
-                <span class="choose-option__name">Boxed</span>
-              </div>
-            </li>
-          </ul>
-          <!-- /list -->
-        </section>
-      </div>
-      <!-- /customizer body inner -->
-    </div>
-    <!-- /customizer body -->
-
-  </div>
-</aside>
-<!-- /customizer sidebar -->
-        </main>
-    </div>
+</div>
 </div>
 <!-- /root -->
 {% endblock %}

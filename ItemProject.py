@@ -44,14 +44,16 @@ def load_user(user_id):
 def home():
     db_session = start()
     categories = db_session.query(Category).all()
+    items = db_session.query(Items).order_by(Items.id.desc()).limit(5).all()
+
     db_session.close()
     return render_template('index.html', flashes=flashes, count=len(flashes),
-                           user=current_user, counter=counter, categories=categories)
+                           user=current_user, counter=counter, categories=categories, items=items)
 
 
 @app.route('/register', methods=['POST', 'GET'])
 def register():
-    print(flashes)
+    db_session = start()
 
     if request.method == 'POST':
         try:
@@ -64,9 +66,12 @@ def register():
             message = "Registeration Successful"
             flashes.append(message)
             flash(message)
+            db_session.close()
             return redirect(url_for('login'))
         except:
+            traceback.print_exc()
             flash("User Already Exists. Login Instead")
+            db_session.close()
             return render_template('register.html')
 
     return render_template('register.html')
@@ -180,22 +185,47 @@ def delete_category(category_id):
     return render_template('delete-category.html', user=current_user, category=category)
 
 
-@app.route('/category/<int:category_id>/')
+@app.route('/<int:category_id>/')
 def item(category_id):
-    return "item"
+    db_session = start()
+
+    category = db_session.query(Category).filter(Category.id == category_id).one()
+
+    category_items = db_session.query(Items).filter(Items.category_id == category_id).all()
+
+    db_session.close()
+    return render_template('item.html', user=current_user, category=category, category_items=category_items)
 
 
-@app.route('/category/<int:category_id>/<int:item_id>/edit')
+@app.route('/<int:category_id>/<int:item_id>/edit')
+@login_required
 def edit_item(category_id, item_id):
     return "edit category"
 
 
-@app.route('/category/<int:category_id>/<int:item_id>/new')
-def new_item(category_id, item_id):
-    return "new category"
+@app.route('/<int:category_id>/new', methods=['GET', 'POST'])
+@login_required
+def new_item(category_id):
+    db_session = start()
+
+    category = db_session.query(Category).filter(Category.id == category_id).one()
+
+    if request.method == 'POST':
+        item = Items(name=request.form['name'], url=request.form.get('url'), description=request.form.get('description'),
+                     user_id=current_user.id, category_id=category_id)
+        db_session.add(item)
+        db_session.commit()
+        db_session.close()
+        flashes.append('New Category Added')
+        flash("New Category Added")
+        return redirect(url_for('home'))
+
+    db_session.close()
+    return render_template('new-item.html', category=category, user=current_user)
 
 
 @app.route('/category/<int:category_id>/<int:item_id>/delete')
+@login_required
 def delete_item(category_id, item_id):
     return "delete category"
 

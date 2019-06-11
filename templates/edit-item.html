@@ -1,5 +1,4 @@
 {% extends 'index.html' %}
-{% block title%}New Category{% endblock %}
 {% block body %}
 {% block header %}
 {{ super() }}
@@ -31,15 +30,34 @@
 
                             <!-- Form Group -->
                             <div class="form-group">
-                                <label for="email-1">Category Name</label>
+                                <label for="email-1">Item Name</label>
                                 <input name="name" class="form-control" id="email-1" aria-describedby="emailHelp1"
                                        required placeholder="Enter Category Name">
                             </div>
                             <!-- /form group -->
 
                             <!-- Form Group -->
+                            <div class="form-group">
+                                <label for="email-1">Item Image Url</label>
+                                <input name="name" class="form-control" aria-describedby="emailHelp1"
+                                       required placeholder="Enter Image Url">
+                            </div>
+                            <!-- /form group -->
+
+                            <!-- Form Row -->
+                            <div class="form-group">
+                                <label>Textarea</label>
+
+                                <div class="">
+                                    <textarea class="form-control" rows="6" placeholder="Description"></textarea>
+                                </div>
+                            </div>
+                            <!-- /form row -->
+
+
+                            <!-- Form Group -->
                             <div class="form-group mb-0">
-                                <button type="submit" class="btn btn-primary text-uppercase">Add Category</button>
+                                <button type="submit" class="btn btn-primary text-uppercase">Add Item</button>
                                 <span class="d-inline-block ml-4"><a href="/">Cancel</a></span>
                             </div>
                             <!-- /form group -->
@@ -62,4 +80,4 @@
 
     </div>
 </div>
-    {% endblock %}
+{% endblock %}
