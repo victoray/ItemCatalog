@@ -579,6 +579,7 @@ pre code {
     width: 100%;
     padding-right: 1.6rem;
     padding-left: 1.6rem
+
 }
 
 .col {
@@ -17586,7 +17587,8 @@ a.text-light-cyan:hover, a.text-light-cyan:focus {
 
 .dt-card__body {
     padding: 3.2rem 3.2rem;
-    display: block
+    display: block;
+    width: 100%;
 }
 
 .dt-card__body + .dt-card__body, .dt-card__header + .dt-card__body {

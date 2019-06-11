@@ -1,11 +1,13 @@
+from flask_login import UserMixin
 from sqlalchemy import Column, ForeignKey, Integer, String
+from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import relationship
-from sqlalchemy import create_engine
 
 Base = declarative_base()
 
-class User(Base):
+
+class User(Base, UserMixin):
     __tablename__ = 'user'
 
     id = Column(Integer, primary_key=True, autoincrement=True)
@@ -51,7 +53,6 @@ class Items(Base):
             'description': self.description,
             'id': self.id
         }
-
 
 
 engine = create_engine('sqlite:///itemcatalog.db')
