@@ -1,4 +1,7 @@
-from flask import Flask, render_template, request
+import random
+import string
+
+from flask import Flask, render_template, request, flash, get_flashed_messages
 from werkzeug.security import generate_password_hash, check_password_hash
 
 
@@ -28,7 +31,9 @@ def register():
         user = User(name=name, email=email, password=password)
         db_session.add(user)
         db_session.commit()
-        return "Registeration Successful"
+
+        flash("Registeration Successful")
+        return render_template('register.html')
 
     return render_template('register.html')
 
@@ -42,7 +47,9 @@ def login():
         except:
             return "User Not Found"
         passcheck = check_password_hash(user.password, password)
-        return "Login Successful" if passcheck and user is not None else "Invalid Username/Password"
+        flash("Login Successful" if passcheck and user is not None else "Invalid Username/Password")
+
+        return render_template('login.html')
 
     return render_template('login.html')
 
@@ -86,5 +93,6 @@ def page_not_found(e):
     return render_template('404.html'), 404
 
 if __name__ == "__main__":
+    app.secret_key = "".join(random.choice(string.punctuation + string.ascii_letters) for i in range(32))
     app.debug = True
     app.run(host="localhost",port=10000)
