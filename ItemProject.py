@@ -3,16 +3,16 @@ import random
 import string
 import traceback
 
-from flask import Flask, render_template, request, flash, redirect, url_for
+from flask import Flask, render_template, request, flash, redirect, url_for, abort
 from flask_login import login_user, current_user, LoginManager, login_required, logout_user
+from oauth2client import client
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
+from validate_email import validate_email
 from werkzeug.security import generate_password_hash, check_password_hash
-from waitress import serve
-from db_setup import Base, User, Category, Items
-
 from whitenoise import WhiteNoise
 
+from db_setup import Base, User, Category, Items
 
 engine = create_engine('sqlite:///itemcatalog.db')
 Base.metadata.bind = engine
@@ -23,18 +23,45 @@ app = Flask(__name__)
 app.wsgi_app = WhiteNoise(app.wsgi_app, root='static/')
 login_manager = LoginManager()
 login_manager.init_app(app)
-flashes = []
-
-users_count = db_session.query(User).count()
-categories_count = db_session.query(Category).count()
-items_count = db_session.query(Items).count()
-counter = list((users_count, categories_count, items_count))
-
+CLIENT_SECRET_FILE = 'client_secret.json'
 
 def start():
     DBSession = sessionmaker(bind=engine)
-    session = DBSession()
-    return session
+    return DBSession()
+
+
+@app.route('/gauth', methods=['POST'])
+def gauth():
+    db_session = start()
+    # If this request does not have `X-Requested-With` header, this could be a CSRF
+    if not request.headers.get('X-Requested-With'):
+        abort(403)
+
+    # Exchange auth code for access token, refresh token, and ID token
+    auth_code = request.data
+    credentials = client.credentials_from_clientsecrets_and_code(CLIENT_SECRET_FILE, ['profile', 'email'], auth_code)
+
+    # Get profile info from ID token
+    userid = credentials.id_token['sub']
+    email = credentials.id_token['email']
+    name = credentials.id_token['name']
+    picture = credentials.id_token['picture']
+
+    # Check if user already exists
+    old_user = db_session.query(User).filter(User.email == email).first()
+
+    if old_user is None:
+        # create new user and login
+        user = User(name=name, email=email, picture=picture)
+        db_session.add(user)
+        db_session.commit()
+        login_user(user)
+    else:
+        login_user(old_user)
+
+    db_session.close()
+    flash("Login Successful, Welcome {}".format(name))
+    return redirect(url_for('home'))
 
 
 @login_manager.user_loader
@@ -52,8 +79,7 @@ def home():
     items = db_session.query(Items).order_by(Items.id.desc()).limit(5).all()
 
     db_session.close()
-    return render_template('index.html', flashes=reversed(flashes), count=len(flashes),
-                           user=current_user, categories=categories, items=items)
+    return render_template('index.html', user=current_user, categories=categories, items=items)
 
 
 @app.route('/register', methods=['POST', 'GET'])
@@ -62,14 +88,18 @@ def register():
 
     if request.method == 'POST':
         try:
-            name = request.form['name']
+            name = "{}".format(request.form['name'])
+            if not validate_email(request.form['email'], check_mx=True):
+                flash("Invalid Email")
+                return render_template('register.html')
+
             email = request.form['email']
+            print(email)
             password = generate_password_hash(request.form['password'])
             user = User(name=name, email=email, password=password)
             db_session.add(user)
             db_session.commit()
-            message = "Registeration Successful"
-            flashes.append(message)
+            message = "Registration Successful"
             flash(message)
             db_session.close()
             return redirect(url_for('login'))
@@ -85,11 +115,12 @@ def register():
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     db_session = start()
+    if current_user.is_authenticated:
+        return redirect(url_for('home'))
     if request.method == 'POST':
         email = request.form['email']
         password = request.form['password']
         remember = False if request.form.get('remember') is None else True
-        print(remember)
         try:
             user = db_session.query(User).filter(User.email == email).one()
         except:
@@ -102,7 +133,6 @@ def login():
 
         if passcheck:
             login_user(user, remember=remember)
-            flashes.append("Login Successful")
             flash("Login Successful, Welcome {}".format(current_user.name))
             db_session.close()
             return redirect(url_for('home'))
@@ -144,7 +174,6 @@ def edit_category(category_id):
         category.name = request.form['name']
         db_session.commit()
         db_session.close()
-        flashes.append("Category Updated")
         flash("Category Updated")
         return redirect(url_for('home'))
 
@@ -163,7 +192,6 @@ def new_category():
         db_session.add(category)
         db_session.commit()
         db_session.close()
-        flashes.append('New Category Added')
         flash("New Category Added")
         return redirect(url_for('home'))
 
@@ -182,7 +210,6 @@ def delete_category(category_id):
         db_session.delete(category)
         db_session.commit()
         db_session.close()
-        flashes.append("{} Deleted".format(category.name))
         flash("{} Deleted".format(category.name))
         return redirect(url_for('home'))
 
@@ -198,7 +225,8 @@ def item(category_id):
     category_items = db_session.query(Items).filter(Items.category_id == category_id).all()
 
     db_session.close()
-    return render_template('item.html', flashes=reversed(flashes), count=len(flashes), user=current_user, category=category, category_items=category_items)
+    return render_template('item.html', user=current_user,
+                           category=category, category_items=category_items)
 
 
 @app.route('/<int:category_id>/<int:item_id>/edit', methods=['GET', 'POST'])
@@ -217,10 +245,8 @@ def edit_item(category_id, item_id):
         db_session.commit()
         db_session.close()
 
-        flashes.append('Item Updated')
         flash("Item successfully updated")
         return redirect(url_for('item', category_id=category_id))
-
 
     db_session.close()
     return render_template('edit-item.html', user=current_user, category=category, item=item)
@@ -234,12 +260,12 @@ def new_item(category_id):
     category = db_session.query(Category).filter(Category.id == category_id).one()
 
     if request.method == 'POST':
-        item = Items(name=request.form['name'], url=request.form.get('url'), description=request.form.get('description'),
+        item = Items(name=request.form['name'], url=request.form.get('url'),
+                     description=request.form.get('description'),
                      user_id=current_user.id, category_id=category_id)
         db_session.add(item)
         db_session.commit()
         db_session.close()
-        flashes.append('New Item Added')
         flash("New Item Added")
         return redirect(url_for('item', category_id=category_id))
 
@@ -259,7 +285,6 @@ def delete_item(category_id, item_id):
         db_session.delete(item)
         db_session.commit()
         db_session.close()
-        flashes.append("{} Deleted".format(item.name))
         flash("{} Deleted".format(item.name))
         return redirect(url_for('item', category_id=category_id))
 
@@ -272,6 +297,12 @@ def page_not_found(e):
     return render_template('404.html'), 404
 
 
+@app.after_request
+def apply_caching(response):
+    response.headers["X-Frame-Options"] = "SAMEORIGIN"
+    return response
+
+
 @app.errorhandler(401)
 def page_not_found(e):
     flash('Login Required')
@@ -281,5 +312,6 @@ def page_not_found(e):
 if __name__ == "__main__":
     app.secret_key = "".join(random.choice(string.punctuation + string.ascii_letters) for i in range(32))
     app.debug = True
-    port = int(os.environ.get('PORT', 8000))
-    serve(app, host='localhost', port=port)
+    port = int(os.environ.get('PORT', 10000))
+    # serve(app, host='localhost', port=port)
+    app.run(host='localhost', port=port)

@@ -57,7 +57,7 @@
                             <!-- Form Group -->
                             <div class="form-group">
                                 <label class="sr-only" for="email-1">Email address</label>
-                                <input type="email" name="email" class="form-control" id="email-1"
+                                <input required type="email" name="email" class="form-control" id="email-1"
                                        aria-describedby="email-1"
                                        placeholder="Enter email">
                             </div>
@@ -87,49 +87,63 @@
               <a class="d-inline-block font-weight-500 ml-3" href="{{url_for('register')}}">Create New Account</a>
             </span>
                             </div>
-                            <!-- /form group -->
+                        </form>
+                        <!-- /form group -->
 
-                            <!-- Form Group -->
-                            <div class="d-flex flex-wrap align-items-center">
-                                <span class="d-inline-block mr-2">Or connect with</span>
+                        <!-- Form Group -->
+                        <div class="d-flex flex-wrap align-items-center">
+                            <span class="d-inline-block mr-2">Or connect with</span>
 
-                                <!-- List -->
-                                <ul class="dt-list dt-list-sm dt-list-cm-0 ml-auto">
+                            <!-- List -->
+                            <ul class="dt-list dt-list-sm dt-list-cm-0 ml-auto">
+                                <div>
                                     <li class="dt-list__item">
                                         <!-- Fab Button -->
-                                        <a href="javascript:void(0)" class="btn btn-outline-primary dt-fab-btn size-30">
-                                            <i class="icon icon-facebook icon-xl"></i>
-                                        </a>
-                                        <!-- /fab button -->
+                                        <button>
+                                            <fb:login-button size="small"
+                                                             data-width="30"
+                                                             scope="public_profile,email"
+                                                             onlogin="sendTokenToServer();">
+                                            </fb:login-button>
+                                            <!-- /fab button -->
+                                        </button>
                                     </li>
-
+                                </div>
+                                <div>
                                     <li class="dt-list__item">
                                         <!-- Fab Button -->
-                                        <a href="javascript:void(0)" class="btn btn-outline-primary dt-fab-btn size-30">
+                                        <button id="signinButton" class="btn btn-outline-primary dt-fab-btn size-30">
                                             <i class="icon icon-google-plus icon-xl"></i>
-                                        </a>
+                                        </button>
                                         <!-- /fab button -->
+                                        <script>
+                                            $('#signinButton').click(function () {
+                                                // signInCallback.
+                                                auth2.grantOfflineAccess().then(signInCallback);
+                                            });
+                                        </script>
                                     </li>
+                                </div>
 
-                                    <li class="dt-list__item">
-                                        <!-- Fab Button -->
-                                        <a href="javascript:void(0)" class="btn btn-outline-primary dt-fab-btn size-30">
-                                            <i class="icon icon-github icon-xl"></i>
-                                        </a>
-                                        <!-- /fab button -->
-                                    </li>
+                                <li class="dt-list__item">
+                                    <!-- Fab Button -->
+                                    <a href="javascript:void(0)" class="btn btn-outline-primary dt-fab-btn size-30">
+                                        <i class="icon icon-github icon-xl"></i>
+                                    </a>
+                                    <!-- /fab button -->
+                                </li>
 
-                                    <li class="dt-list__item">
-                                        <!-- Fab Button -->
-                                        <a href="javascript:void(0)" class="btn btn-outline-primary dt-fab-btn size-30">
-                                            <i class="icon icon-twitter icon-xl"></i>
-                                        </a>
-                                        <!-- /fab button -->
-                                    </li>
-                                </ul>
-                                <!-- /list -->
-                            </div>
-                            <!-- /form group -->
+                                <li class="dt-list__item">
+                                    <!-- Fab Button -->
+                                    <a href="javascript:void(0)" class="btn btn-outline-primary dt-fab-btn size-30">
+                                        <i class="icon icon-twitter icon-xl"></i>
+                                    </a>
+                                    <!-- /fab button -->
+                                </li>
+                            </ul>
+                            <!-- /list -->
+                        </div>
+                        <!-- /form group -->
 
 
                         </form>
@@ -138,16 +152,16 @@
                     </div>
                     <!-- /login content inner -->
                     {% with messages = get_flashed_messages() %}
-                        {% if messages %}
-                            {% for message in messages %}
+                    {% if messages %}
+                    {% for message in messages %}
                     <div class="alert alert-dark alert-dismissible fade show" role="alert">
                         <strong>{{ message }}</strong>
                         <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
                     </div>
-                            {% endfor %}
-                         {% endif %}
+                    {% endfor %}
+                    {% endif %}
                     {% endwith %}
                     <!-- Login Content Footer -->
                     <div class="dt-login__content-footer">
@@ -168,3 +182,4 @@
     </div>
 </div>
 {% endblock %}
+

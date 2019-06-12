@@ -4,3 +4,7 @@ flask_login
 sqlalchemy
 gunicorn
 whitenoise
+flask-talisman
+flask-csp
+validate_email
+Py3DNS

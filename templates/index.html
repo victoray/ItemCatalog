@@ -3,6 +3,80 @@
 
 
 <head>
+
+
+    <script>
+    window.fbAsyncInit = function () {
+        FB.init({
+            appId: '604375573406634',
+            cookie: true,
+            xfbml: true,
+            version: 'v3.3'
+        });
+
+        FB.AppEvents.logPageView();
+
+    };
+
+    (function (d, s, id) {
+        var js, fjs = d.getElementsByTagName(s)[0];
+        if (d.getElementById(id)) {
+            return;
+        }
+        js = d.createElement(s);
+        js.id = id;
+        js.src = "https://connect.facebook.net/en_US/sdk.js";
+        fjs.parentNode.insertBefore(js, fjs);
+    }(document, 'script', 'facebook-jssdk'));
+
+    function sendTokenToServer() {
+        var access_token = FB.getAuthResponse()['accessToken'];
+        console.log(access_token)
+        console.log('Welcome!  Fetching your information.... ');
+        FB.api('/me', function (response) {
+            console.log('Successful login for: ' + response.name);
+            $.ajax({
+                type: 'POST',
+                url: '/fbconnect',
+                processData: false,
+                data: access_token,
+                contentType: 'application/octet-stream; charset=utf-8',
+                success: function (result) {
+                    // Handle or verify the server response if necessary.
+                    if (result) {
+                        $('#result').html('Login Successful!</br>' + result + '</br>Redirecting...')
+                        setTimeout(function () {
+                            window.location.href = "/restaurant";
+                        }, 4000);
+                    } else {
+                        $('#result').html('Failed to make a server-side call. Check your configuration and console.');
+                    }
+                }
+            });
+        })}
+
+</script>
+    <!-- BEGIN Pre-requisites -->
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js">
+    </script>
+    <script src="https://apis.google.com/js/client:platform.js?onload=start" async defer>
+    </script>
+    <!-- END Pre-requisites -->
+    <script>
+        function start() {
+            gapi.load('auth2', function () {
+                auth2 = gapi.auth2.init({
+                    client_id: '987017379604-7i4kllhfh2632600fab05ilnvndf3ief.apps.googleusercontent.com',
+                });
+            });
+        }
+    </script>
+    <script>
+        $('#signinButton').click(function () {
+            // signInCallback defined in step 6.
+            auth2.grantOfflineAccess().then(signInCallback);
+        });
+    </script>
     <!-- Meta tags -->
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -79,8 +153,10 @@
                     <!-- Brand logo -->
                     <span class="dt-brand__logo">
         <a class="dt-brand__logo-link" href="/">
-          <img style="width: 85px" class=" d-none d-sm-inline-block" src="{{url_for('static', filename='images/logo.png')}}" alt="Drift">
-          <img class="dt-brand__logo-symbol d-sm-none" src="{{url_for('static', filename='images/logo-symbol.png')}}" alt="Drift">
+          <img style="width: 85px" class=" d-none d-sm-inline-block"
+               src="{{url_for('static', filename='images/logo.png')}}" alt="Drift">
+          <img class="dt-brand__logo-symbol d-sm-none" src="{{url_for('static', filename='images/logo-symbol.png')}}"
+               alt="Drift">
         </a>
       </span>
                     <!-- /brand logo -->
@@ -146,40 +222,6 @@
                                         </div>
                                     </div>
                                     <!-- /dropdown menu header -->
-
-                                    <!-- Dropdown Menu Body -->
-                                    <div class="dropdown-menu-body ps-custom-scrollbar">
-
-                                        <div class="h-auto">
-                                            <!-- Media -->
-                                            {% for message in flashes %}
-                                            <a href="javascript:void(0)" class="media">
-
-                                                <!-- Avatar -->
-                                                <img class="dt-avatar mr-3"
-                                                     src="https://png.pngtree.com/svg/20161130/a50ce51c9e.svg"
-                                                     alt="User">
-                                                <!-- avatar -->
-
-                                                <!-- Media Body -->
-                                                <span class="media-body">
-                    <span class="message">
-                      <span class="user-name">
-                      {{message}}
-                    </span>
-                    <span class="meta-date">8 hours ago</span>
-                    </span></span>
-                                                <!-- /media body -->
-
-                                            </a>
-                                            {% endfor %}
-                                            <!-- /media -->
-                                        </div>
-
-                                    </div>
-                                    <!-- /dropdown menu body -->
-
-
                                     <!-- Dropdown Menu Footer -->
                                     <div class="dropdown-menu-footer">
                                         <a href="javascript:void(0)" class="card-link"> See All <i
@@ -321,7 +363,8 @@
                                             <!-- Widget Info -->
                                             <div class="dt-widget__info text-truncate">
                                                 <div class="dt-widget__title d-flex">
-                                                    <span class="f-16 font-weight-500"><a href="{{url_for('item', category_id = category.id)}}">{{category.name}}</a></span>
+                                                    <span class="f-16 font-weight-500"><a
+                                                            href="{{url_for('item', category_id = category.id)}}">{{category.name}}</a></span>
                                                 </div>
                                             </div>
                                             <!-- /widget info -->
@@ -424,12 +467,15 @@
                                                 <!-- Media Body -->
                                                 <div class="media-body order-sm-1">
                                                     <h4 class="mb-2">{{item.name}}</h4>
-                                                    <h5><a href="{{url_for('item', category_id = category.id)}}">Category: {{category.name}}</a></h5>
+                                                    <h5><a href="{{url_for('item', category_id = category.id)}}">Category:
+                                                        {{category.name}}</a></h5>
                                                     <p class="mb-5">
-                                                        {{item.description[:500]}}...  <a class="d-inline-block font-weight-500 align-middle" href="{{url_for('item', category_id = category.id)}}">
-                                                            <span>Read Full Description</span>
-                                                            <i class="icon icon-arrow-long-right icon-lg ml-1"></i>
-                                                        </a>
+                                                        {{item.description[:500]}}... <a
+                                                            class="d-inline-block font-weight-500 align-middle"
+                                                            href="{{url_for('item', category_id = category.id)}}">
+                                                        <span>Read Full Description</span>
+                                                        <i class="icon icon-arrow-long-right icon-lg ml-1"></i>
+                                                    </a>
                                                     </p>
 
                                                 </div>
@@ -469,8 +515,9 @@
             <!-- Footer -->
             <footer class="dt-footer" style="width: 100%; max-width: 100%">
                 Copyright Company Name © 2019
-            </footer></main>
-            <!-- /footer -->
+            </footer>
+        </main>
+        <!-- /footer -->
     </div>
 </div>
 </div>
@@ -495,7 +542,45 @@
 <script src="{{url_for('static', filename='js/custom/charts/dashboard-listing.js')}}"></script>
 
 
+<script>
+    function signInCallback(authResult) {
+        if (authResult['code']) {
 
+            // Hide the sign-in button now that the user is authorized, for example:
+            $('#signinButton').attr('style', 'display: none');
+
+            // Send the code to the server
+            $.ajax({
+                type: 'POST',
+                url: 'http://localhost:10000/gauth',
+                // Always include an `X-Requested-With` header in every AJAX request,
+                // to protect against CSRF attacks.
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest'
+                },
+                contentType: 'application/octet-stream; charset=utf-8',
+                success: function (result) {
+                    // Handle or verify the server response.
+                    console.log(result)
+                    if (result) {
+                        $('#result').html('Login Successful!</br>' + result + '</br>Redirecting...')
+                        setTimeout(function () {
+                            window.location.href = "/";
+                        }, 1000);
+                    } else if (authResult['error']) {
+                        console.log('There was an error: ' + authResult['error']);
+                    } else {
+                        $('#result').html('Failed to make a server-side call. Check your configuration and console.');
+                    }
+                },
+                processData: false,
+                data: authResult['code']
+            });
+        } else {
+            // There was an error.
+        }
+    }
+</script>
 
 </body>
 
