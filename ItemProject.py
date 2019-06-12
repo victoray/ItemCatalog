@@ -11,12 +11,16 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from waitress import serve
 from db_setup import Base, User, Category, Items
 
+from whitenoise import WhiteNoise
+
+
 engine = create_engine('sqlite:///itemcatalog.db')
 Base.metadata.bind = engine
 DBSession = sessionmaker(bind=engine)
 db_session = DBSession()
 
 app = Flask(__name__)
+app.wsgi_app = WhiteNoise(app.wsgi_app, root='static/')
 login_manager = LoginManager()
 login_manager.init_app(app)
 flashes = []
