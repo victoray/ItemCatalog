@@ -282,4 +282,4 @@ if __name__ == "__main__":
     app.secret_key = "".join(random.choice(string.punctuation + string.ascii_letters) for i in range(32))
     app.debug = True
     port = int(os.environ.get('PORT', 8000))
-    serve(app, host='0.0.0.0', port=port)
+    serve(app, host='localhost', port=port)
