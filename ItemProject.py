@@ -29,6 +29,14 @@ def start():
     DBSession = sessionmaker(bind=engine)
     return DBSession()
 
+@app.route('/fbconnect', methods=['POST'])
+def fbconnect():
+    # If this request does not have `X-Requested-With` header, this could be a CSRF
+    if not request.headers.get('X-Requested-With'):
+        abort(403)
+
+
+    return redirect(url_for('home'))
 
 @app.route('/gauth', methods=['POST'])
 def gauth():
