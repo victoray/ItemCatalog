@@ -2,3 +2,4 @@ waitress
 flask
 flask_login
 sqlalchemy
+gunicorn
