@@ -1,3 +1,4 @@
+import os
 import random
 import string
 import traceback
@@ -276,5 +277,5 @@ def page_not_found(e):
 if __name__ == "__main__":
     app.secret_key = "".join(random.choice(string.punctuation + string.ascii_letters) for i in range(32))
     app.debug = True
-    serve(app, host='0.0.0.0', port=1000)
-    #app.run(host="localhost", port=10000)
+    port = int(os.environ.get('PORT', 8000))
+    serve(app, host='0.0.0.0', port=port)
