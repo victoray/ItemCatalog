@@ -483,7 +483,7 @@ function changeTheme($theme, $style, $themeStylesheet, $init) {
         $logo.attr('src', 'static/images/logo-white.png');
         $body.find('.dt-login__content-inner .dt-brand__logo-img').attr('src', 'static/images/logo.png');
         $body.removeClass('theme-dark').addClass('theme-semidark');
-        $themeStylesheet.href = 'static/css' + $theme + '-' + $style + '.min.css';
+        $themeStylesheet.href = 'static/css/' + $theme + '-' + $style + '.min.css';
     }
 
     localStorage.setItem('dt-theme', $theme);
