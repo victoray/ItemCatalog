@@ -3,63 +3,72 @@
 
 
 <head>
+    <!-- Meta tags -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="Drift - A fully responsive, HTML5 based admin template">
+    <meta name="keywords"
+          content="Responsive, HTML5, admin theme, business, professional, jQuery, web design, CSS3, sass">
+    <!-- /meta tags -->
 
 
     <script>
-    window.fbAsyncInit = function () {
-        FB.init({
-            appId: '604375573406634',
-            cookie: true,
-            xfbml: true,
-            version: 'v3.3'
-        });
-
-        FB.AppEvents.logPageView();
-
-    };
-
-    (function (d, s, id) {
-        var js, fjs = d.getElementsByTagName(s)[0];
-        if (d.getElementById(id)) {
-            return;
-        }
-        js = d.createElement(s);
-        js.id = id;
-        js.src = "https://connect.facebook.net/en_US/sdk.js";
-        fjs.parentNode.insertBefore(js, fjs);
-    }(document, 'script', 'facebook-jssdk'));
-
-    function sendTokenToServer() {
-        var access_token = FB.getAuthResponse()['accessToken'];
-        console.log(access_token)
-        console.log('Welcome!  Fetching your information.... ');
-        FB.api('/me', function (response) {
-            console.log('Successful login for: ' + response.name);
-            $.ajax({
-                type: 'POST',
-                url: 'http://localhost:10000/fbconnect',
-
-                headers: {
-                    'X-Requested-With': 'XMLHttpRequest'
-                },
-                processData: false,
-                data: access_token,
-                contentType: 'application/octet-stream; charset=utf-8',
-                success: function (result) {
-                    // Handle or verify the server response if necessary.
-                    if (result) {
-                        $('#result').html('Login Successful!</br>' + result + '</br>Redirecting...')
-                        setTimeout(function () {
-                            window.location.href = "/";
-                        }, 0);
-                    } else {
-                        $('#result').html('Failed to make a server-side call. Check your configuration and console.');
-                    }
-                }
+        window.fbAsyncInit = function () {
+            FB.init({
+                appId: '604375573406634',
+                cookie: true,
+                xfbml: true,
+                version: 'v3.3'
             });
-        })}
 
-</script>
+            FB.AppEvents.logPageView();
+
+        };
+
+        (function (d, s, id) {
+            var js, fjs = d.getElementsByTagName(s)[0];
+            if (d.getElementById(id)) {
+                return;
+            }
+            js = d.createElement(s);
+            js.id = id;
+            js.src = "https://connect.facebook.net/en_US/sdk.js";
+            fjs.parentNode.insertBefore(js, fjs);
+        }(document, 'script', 'facebook-jssdk'));
+
+        function sendTokenToServer() {
+            var access_token = FB.getAuthResponse()['accessToken'];
+            console.log(access_token)
+            console.log('Welcome!  Fetching your information.... ');
+            FB.api('/me', function (response) {
+                console.log('Successful login for: ' + response.name);
+                $.ajax({
+                    type: 'POST',
+                    url: 'http://localhost:10000/fbconnect',
+
+                    headers: {
+                        'X-Requested-With': 'XMLHttpRequest'
+                    },
+                    processData: false,
+                    data: access_token,
+                    contentType: 'application/octet-stream; charset=utf-8',
+                    success: function (result) {
+                        // Handle or verify the server response if necessary.
+                        if (result) {
+                            $('#result').html('Login Successful!</br>' + result + '</br>Redirecting...')
+                            setTimeout(function () {
+                                window.location.href = "/";
+                            }, 0);
+                        } else {
+                            $('#result').html('Failed to make a server-side call. Check your configuration and console.');
+                        }
+                    }
+                });
+            })
+        }
+
+    </script>
     <!-- BEGIN Pre-requisites -->
     <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js">
     </script>
@@ -75,14 +84,6 @@
             });
         }
     </script>
-    <!-- Meta tags -->
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta name="description" content="Drift - A fully responsive, HTML5 based admin template">
-    <meta name="keywords"
-          content="Responsive, HTML5, admin theme, business, professional, jQuery, web design, CSS3, sass">
-    <!-- /meta tags -->
     <title>{% block title%}Catalog{% endblock %}</title>
 
     <!-- Site favicon -->
@@ -103,6 +104,18 @@
     <link rel="stylesheet" href="{{url_for('static', filename='css/chartist.min.css')}}">
     <link rel="stylesheet" href="{{url_for('static', filename='css/semidark-style-1.min.css')}}">
     <!-- /load styles -->
+    <style>
+        @media only screen
+        and (min-device-width: 320px)
+        and (max-device-width: 568px)
+        and (-webkit-min-device-pixel-ratio: 2)
+        and (orientation: portrait) {
+
+            #itempic {
+                display: none;
+            }
+        }
+    </style>
 
 </head>
 
@@ -141,14 +154,6 @@
 
                 <!-- Brand -->
                 <div class="dt-brand">
-
-                    <!--                    &lt;!&ndash; Brand tool &ndash;&gt;-->
-                    <!--                    <div class="dt-brand__tool" data-toggle="main-sidebar">-->
-                    <!--                        <div class="hamburger-inner"></div>-->
-                    <!--                    </div>-->
-                    <!--                    &lt;!&ndash; /brand tool &ndash;&gt;-->
-
-                    <!-- Brand logo -->
                     <span class="dt-brand__logo">
         <a class="dt-brand__logo-link" href="/">
           <img style="width: 85px" class=" d-none d-sm-inline-block"
@@ -163,14 +168,13 @@
                 <!-- /brand -->
 
                 <!-- Header toolbar-->
-                <div class="dt-header__toolbar">
+                <div style="float: right" class="dt-header__toolbar">
 
                     <!-- Header Menu Wrapper -->
                     <div class="dt-nav-wrapper">
                         <!-- Header Menu -->
                         <ul class="dt-nav d-lg-none">
                             <li class="dt-nav__item dt-notification-search dropdown">
-
                                 <!-- Dropdown Link -->
                                 <a href="#" class="dt-nav__link dropdown-toggle no-arrow" data-toggle="dropdown"
                                    aria-haspopup="true" aria-expanded="false"> <i
@@ -196,47 +200,9 @@
                         </ul>
                         <!-- /header menu -->
 
-                        <!-- Header Menu -->
-                        <ul class="dt-nav">
-                            <li class="dt-nav__item dt-notification dropdown">
-
-                                <!-- Dropdown Link -->
-                                <a href="#" class="dt-nav__link dropdown-toggle no-arrow" data-toggle="dropdown"
-                                   aria-haspopup="true" aria-expanded="false"> <i
-                                        class="icon icon-notification2 icon-fw dt-icon-alert"></i>
-                                </a>
-                                <!-- /dropdown link -->
-
-                                <!-- Dropdown Option -->
-                                <div class="dropdown-menu dropdown-menu-right dropdown-menu-media">
-                                    <!-- Dropdown Menu Header -->
-                                    <div class="dropdown-menu-header">
-                                        <h4 class="title">Notifications ({{ count }})</h4>
-
-                                        <div class="ml-auto action-area">
-                                            <a href="javascript:void(0)">Mark All Read</a> <a class="ml-2"
-                                                                                              href="javascript:void(0)">
-                                            <i class="icon icon-settings icon-lg text-light-gray"></i> </a>
-                                        </div>
-                                    </div>
-                                    <!-- /dropdown menu header -->
-                                    <!-- Dropdown Menu Footer -->
-                                    <div class="dropdown-menu-footer">
-                                        <a href="javascript:void(0)" class="card-link"> See All <i
-                                                class="icon icon-arrow-right icon-fw"></i>
-                                        </a>
-                                    </div>
-                                    <!-- /dropdown menu footer -->
-                                </div>
-                                <!-- /dropdown option -->
-
-                            </li>
-                        </ul>
-                        <!-- /header menu -->
-
                         {% if user.is_authenticated %}
                         <!-- Header Login Menu -->
-                        <ul class="dt-nav">
+                        <ul style="float: right" class="dt-nav">
                             <li class="dt-nav__item dropdown">
 
                                 <!-- Dropdown Link -->
@@ -253,8 +219,7 @@
                                 <div class="dropdown-menu dropdown-menu-right">
                                     <div class="dt-avatar-wrapper flex-nowrap p-6 mt-n2 bg-gradient-purple text-white rounded-top">
                                         {% if user.picture %}
-                                        <img class="dt-avatar" src="{{user.picture}}"
-                                             alt="">
+                                        <img class="dt-avatar" src="{{user.picture}}" alt="">
                                         <span class="dt-avatar-info">
                                         {% endif %}
                   <span class="dt-avatar-name">{{user.name}}</span>
@@ -276,11 +241,10 @@
                             <li class="dt-nav__item dropdown">
 
                                 <!-- Dropdown Link -->
-                                <a href="{{url_for('login')}}" class="dt-nav__link no-arrow dt-avatar-wrapper"
-                                   aria-haspopup="true" aria-expanded="false">
-                                    <span class="dt-avatar-info d-none d-sm-block">
-                <span class="dt-avatar-name">Login</span>
-              </span> </a>
+                                <div style="padding-top: 10px">
+                                    <button type="button" class="btn btn-secondary mr-2 mb-2">
+                                        <a href="{{url_for('login')}}">Login</a></button>
+                                </div>
                                 <!-- /dropdown link -->
 
                             </li>
@@ -293,211 +257,111 @@
                 </div>
                 <!-- /header toolbar -->
 
-            </div>
-            <!-- /header container -->
-
         </header>
-        <!-- /header -->
-        <!-- Site Main -->
-        <main class="dt-main">
-            <!-- Sidebar -->
-            {% endblock %}
-            <!-- /sidebar -->
-            <!-- Site Content Wrapper -->
-            <div class="dt-content-wrapper">
+    </div>
+    <!-- /header container -->
 
-                <!-- Site Content -->
-                <div class="dt-content">
+    </header>
+    <!-- /header -->
+    <!-- Site Main -->
+    <main class="dt-main">
+        <!-- Sidebar -->
+        {% endblock %}
+        <!-- /sidebar -->
+        <!-- Site Content Wrapper -->
+        <div class="dt-content-wrapper">
 
-                    <!-- Page Header -->
-                    <div class="dt-page__header">
-                        <h1 class="dt-page__title">Catalog App</h1>
-                    </div>
-                    <!-- /page header -->
+            <!-- Site Content -->
+            <div class="dt-content">
 
-                    <!-- Grid -->
-                    <div class="row">
+                <!-- Page Header -->
+                <div class="dt-page__header">
+                    <h1 class="dt-page__title">Catalog App</h1>
+                </div>
+                <!-- /page header -->
 
-                        <!-- Grid Item -->
-                        <div class="col-12">
+                <!-- Grid -->
+                <div class="row">
 
-                            <!-- Card -->
-                            <div class="dt-card dt-card__full-height pb-4">
+                    <!-- Grid Item -->
+                    <div class="col-12">
 
-                                <!-- Card Header -->
-                                <div class="dt-card__header mb-5">
+                        <!-- Card -->
+                        <div class="dt-card dt-card__full-height pb-4">
 
-                                    <!-- Card Heading -->
-                                    <div class="dt-card__heading">
-                                        <h3 class="dt-card__title">CATEGORIES</h3>
+                            <!-- Card Header -->
+                            <div class="dt-card__header mb-5">
 
-                                    </div>
-                                    <!-- /card heading -->
-                                    {% if user.is_authenticated %}
+                                <!-- Card Heading -->
+                                <div class="dt-card__heading">
+                                    <h3 class="dt-card__title">CATEGORIES</h3>
 
-                                    <a href="{{url_for('new_category')}}" class="d-inline-block"><i
-                                            class="icon icon-circle-add-o mr-2"></i>Add New</a>
-                                    {% endif %}
                                 </div>
-                                <!-- /card header -->
+                                <!-- /card heading -->
+                                {% if user.is_authenticated %}
 
-                                <!-- Card Body -->
-                                <div class="dt-card__body p-0">
-                                    <!-- Widget -->
-                                    <div class="dt-widget dt-widget-sm dt-widget-hover">
+                                <a href="{{url_for('new_category')}}" class="d-inline-block"><i
+                                        class="icon icon-circle-add-o mr-2"></i>Add New</a>
+                                {% endif %}
+                            </div>
+                            <!-- /card header -->
 
-                                        {% for category in categories %}
-                                        <!-- Widget Item -->
-                                        <div class="dt-widget__item">
+                            <!-- Card Body -->
+                            <div class="dt-card__body p-0">
+                                <!-- Widget -->
+                                <div class="dt-widget dt-widget-sm dt-widget-hover">
 
-                                            <!-- Widget Image -->
-                                            <div class="dt-widget__img align-self-center">
-                                                <!-- Avatar -->
-                                                <i class="icon icon-ripple2 icon-fw icon-3x text-primary"></i>
-                                                <!-- /avatar -->
-                                            </div>
-                                            <!-- /widget image -->
+                                    {% for category in categories %}
+                                    <!-- Widget Item -->
+                                    <div class="dt-widget__item">
 
-                                            <!-- Widget Info -->
-                                            <div class="dt-widget__info text-truncate">
-                                                <div class="dt-widget__title d-flex">
+                                        <!-- Widget Image -->
+                                        <div class="dt-widget__img align-self-center">
+                                            <!-- Avatar -->
+                                            <i class="icon icon-ripple2 icon-fw icon-3x text-primary"></i>
+                                            <!-- /avatar -->
+                                        </div>
+                                        <!-- /widget image -->
+
+                                        <!-- Widget Info -->
+                                        <div class="dt-widget__info text-truncate">
+                                            <div class="dt-widget__title d-flex">
                                                     <span class="f-16 font-weight-500"><a
                                                             href="{{url_for('item', category_id = category.id)}}">{{category.name}}</a></span>
-                                                </div>
                                             </div>
-                                            <!-- /widget info -->
-
-                                            <!-- Widget Extra -->
-                                            <div class="dt-widget__extra text-right">
-                                                <!-- Hide Content -->
-                                                {% if user.is_authenticated %}
-                                                <div>
-                                                    <!-- Action Button Group -->
-                                                    <div class="action-btn-group">
-                                                        <button class="btn btn-primary btn-sm"><a style="color: white"
-                                                                                                  href="{{url_for('edit_category', category_id=category.id)}}">
-                                                            Edit </a></button>
-                                                        <button class="btn btn-secondary btn-sm"><a style="color: white"
-                                                                                                    href="{{url_for('delete_category', category_id=category.id)}}">
-                                                            Delete </a></button>
-                                                    </div>
-                                                    <!-- /action button group -->
-                                                </div>
-                                                <!-- /hide content -->
-                                                {% endif %}
-                                            </div>
-                                            <!-- /widget extra -->
-
                                         </div>
-                                        <!-- /widgets item -->
-                                        {% endfor %}
+                                        <!-- /widget info -->
 
-
-                                    </div>
-                                    <!-- /widget -->
-                                </div>
-                                <!-- /card body -->
-
-                            </div>
-                            <!-- /card -->
-
-                        </div>
-                        <!-- /grid item -->
-
-
-                    </div>
-                    <!-- /grid -->
-
-                    <!-- Grid -->
-                    <div class="row">
-
-                        <!-- Grid Item -->
-                        <div class="col-xl-4 order-xl-2">
-
-                            <!-- Grid -->
-                            <div class="row">
-
-                            </div>
-                            <!-- /grid -->
-
-                        </div>
-                        <!-- /grid item -->
-
-                        <!-- Grid Item -->
-                        <div class="col-12">
-
-                            <!-- Card -->
-                            <div class="card">
-
-                                <!-- Card header -->
-                                <div class="card-header card-nav border-bottom-0">
-                                    <div class="d-flex align-items-center justify-content-between mb-4">
-                                        <h3 class="dt-card__title">Latest Items</h3>
-                                    </div>
-
-                                </div>
-                                <!-- /card header -->
-
-                                <!-- Tab panel -->
-
-                                <div class="tab-pane">
-
-                                    <!-- Card Body -->
-                                    <div class="card-body">
-
-                                        <!-- Media List -->
-                                        <div class="media-list media-separator">
-                                            <!-- Media -->
-                                            {% for item in items %}
-                                            {% for category in categories %}
-                                            {% if item.category_id == category.id %}
-                                            <div class="media media-news">
-
-                                            </div>
-                                            <div class="media media-news">
-
-                                                <!-- Image -->
-                                                <img class="img-fluid rounded-xl order-sm-2 ml-sm-10"
-                                                     src="{{item.url}}"
-                                                     alt="">
-                                                <!-- /image -->
-
-                                                <!-- Media Body -->
-                                                <div class="media-body order-sm-1">
-                                                    <h4 class="mb-2">{{item.name}}</h4>
-                                                    <h5><a href="{{url_for('item', category_id = category.id)}}">Category:
-                                                        {{category.name}}</a></h5>
-                                                    <p class="mb-5">
-                                                        {{item.description[:500]}}... <a
-                                                            class="d-inline-block font-weight-500 align-middle"
-                                                            href="{{url_for('item', category_id = category.id)}}">
-                                                        <span>Read Full Description</span>
-                                                        <i class="icon icon-arrow-long-right icon-lg ml-1"></i>
-                                                    </a>
-                                                    </p>
-
+                                        <!-- Widget Extra -->
+                                        <div class="dt-widget__extra text-right">
+                                            <!-- Hide Content -->
+                                            {% if user.is_authenticated %}
+                                            <div>
+                                                <!-- Action Button Group -->
+                                                <div class="action-btn-group">
+                                                    <button class="btn btn-primary btn-sm"><a style="color: white"
+                                                                                              href="{{url_for('edit_category', category_id=category.id)}}">
+                                                        Edit </a></button>
+                                                    <button class="btn btn-secondary btn-sm"><a style="color: white"
+                                                                                                href="{{url_for('delete_category', category_id=category.id)}}">
+                                                        Delete </a></button>
                                                 </div>
-                                                <!-- /media body -->
-
+                                                <!-- /action button group -->
                                             </div>
-                                            <!-- /media -->
-                                            <!-- Media -->
+                                            <!-- /hide content -->
                                             {% endif %}
-                                            {% endfor %}
-                                            {% endfor %}
-                                            <!-- /media -->
                                         </div>
-                                        <!-- /media list -->
+                                        <!-- /widget extra -->
 
                                     </div>
-                                    <!-- /card body -->
+                                    <!-- /widgets item -->
+                                    {% endfor %}
+
 
                                 </div>
-                                <!-- /tab panel -->
-
-
+                                <!-- /widget -->
                             </div>
-                            <!-- /tab content-->
+                            <!-- /card body -->
 
                         </div>
                         <!-- /card -->
@@ -505,18 +369,119 @@
                     </div>
                     <!-- /grid item -->
 
+
                 </div>
                 <!-- /grid -->
 
+                <!-- Grid -->
+                <div class="row">
+
+                    <!-- Grid Item -->
+                    <div class="col-xl-4 order-xl-2">
+
+                        <!-- Grid -->
+                        <div class="row">
+
+                        </div>
+                        <!-- /grid -->
+
+                    </div>
+                    <!-- /grid item -->
+
+                    <!-- Grid Item -->
+                    <div class="col-12">
+
+                        <!-- Card -->
+                        <div class="card">
+
+                            <!-- Card header -->
+                            <div class="card-header card-nav border-bottom-0">
+                                <div class="d-flex align-items-center justify-content-between mb-4">
+                                    <h3 class="dt-card__title">Latest Items</h3>
+                                </div>
+
+                            </div>
+                            <!-- /card header -->
+
+                            <!-- Tab panel -->
+
+                            <div class="tab-pane">
+
+                                <!-- Card Body -->
+                                <div class="card-body">
+
+                                    <!-- Media List -->
+                                    <div class="media-list media-separator">
+                                        <!-- Media -->
+                                        {% for item in items %}
+                                        {% for category in categories %}
+                                        {% if item.category_id == category.id %}
+                                        <div class="media media-news">
+
+                                        </div>
+                                        <div class="media media-news">
+
+                                            <!-- Image -->
+                                            <img class="img-fluid rounded-xl order-sm-2 ml-sm-10"
+                                                 src="{{item.url}}"
+                                                 alt="">
+                                            <!-- /image -->
+
+                                            <!-- Media Body -->
+                                            <div class="media-body order-sm-1">
+                                                <h4 class="mb-2">{{item.name}}</h4>
+                                                <h5><a href="{{url_for('item', category_id = category.id)}}">Category:
+                                                    {{category.name}}</a></h5>
+                                                <p class="mb-5">
+                                                    {{item.description[:500]}}... <a
+                                                        class="d-inline-block font-weight-500 align-middle"
+                                                        href="{{url_for('item', category_id = category.id)}}">
+                                                    <span>Read Full Description</span>
+                                                    <i class="icon icon-arrow-long-right icon-lg ml-1"></i>
+                                                </a>
+                                                </p>
+
+                                            </div>
+                                            <!-- /media body -->
+
+                                        </div>
+                                        <!-- /media -->
+                                        <!-- Media -->
+                                        {% endif %}
+                                        {% endfor %}
+                                        {% endfor %}
+                                        <!-- /media -->
+                                    </div>
+                                    <!-- /media list -->
+
+                                </div>
+                                <!-- /card body -->
+
+                            </div>
+                            <!-- /tab panel -->
+
+
+                        </div>
+                        <!-- /tab content-->
+
+                    </div>
+                    <!-- /card -->
+
+                </div>
+                <!-- /grid item -->
+
             </div>
-            <!-- /site content -->
-            <!-- Footer -->
-            <footer class="dt-footer" style="width: 100%; max-width: 100%">
-                Copyright Company Name © 2019
-            </footer>
-        </main>
-        <!-- /footer -->
-    </div>
+            <!-- /grid -->
+
+        </div>
+        <!-- /site content -->
+        <!-- Footer -->
+        <footer class="dt-footer" style="width: 100%; max-width: 100%">
+            Copyright Company Name © 2019
+        </footer>
+    </main>
+    <!-- /footer -->
+</div>
 </div>
 </div>
 <!-- /root -->
@@ -564,7 +529,7 @@
                         $('#result').html('Login Successful!</br>' + result + '</br>Redirecting...')
                         setTimeout(function () {
                             window.location.href = "/";
-                        }, 1000);
+                        }, 0);
                     } else if (authResult['error']) {
                         console.log('There was an error: ' + authResult['error']);
                     } else {

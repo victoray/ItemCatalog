@@ -5,7 +5,7 @@ import string
 import traceback
 
 import httplib2
-from flask import Flask, render_template, request, flash, redirect, url_for, abort
+from flask import Flask, render_template, request, flash, redirect, url_for, abort, jsonify
 from flask_login import login_user, current_user, LoginManager, login_required, logout_user
 from oauth2client import client
 from sqlalchemy import create_engine
@@ -66,9 +66,9 @@ def fbconnect():
         user = User(name=name, email=email, picture=picture)
         db_session.add(user)
         db_session.commit()
-        login_user(user)
+        login_user(user, remember=True)
     else:
-        login_user(old_user)
+        login_user(old_user, remember=True)
 
     db_session.close()
     flash("Login Successful, Welcome {}".format(name))
@@ -335,6 +335,23 @@ def delete_item(category_id, item_id):
 
     db_session.close()
     return render_template('delete-item.html', user=current_user, category=category, item=item)
+
+@app.route('/<int:category_id>/JSON')
+def itemJSON(category_id):
+    db_session = start()
+    items = db_session.query(Items).filter(Items.category_id == category_id).all()
+
+    db_session.close()
+    return jsonify(category_items=[i.serialize for i in items])
+
+
+@app.route('/<int:category_id>/<int:item_id>/JSON')
+def categoryJSON(category_id, item_id):
+    db_session = start()
+    item = db_session.query(Items).filter(Items.id == item_id).one()
+
+    db_session.close()
+    return jsonify(Item=item.serialize)
 
 
 @app.errorhandler(404)

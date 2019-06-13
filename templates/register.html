@@ -99,46 +99,41 @@
                             <!-- /form group -->
 
                             <!-- Form Group -->
-                            <div class="d-flex flex-wrap align-items-center">
-                                <span class="d-inline-block mr-2">Or connect with</span>
+                        <div class="d-flex flex-wrap align-items-center">
+                            <span class="d-inline-block mr-2">Or connect with</span>
 
-                                <!-- List -->
-                                <ul class="dt-list dt-list-sm dt-list-cm-0 ml-auto">
+                            <!-- List -->
+                            <ul class="dt-list dt-list-sm dt-list-cm-0 ml-auto">
+                                <div>
                                     <li class="dt-list__item">
                                         <!-- Fab Button -->
-                                        <a href="javascript:void(0)" class="btn btn-outline-primary dt-fab-btn size-30">
-                                            <i class="icon icon-facebook icon-xl"></i>
-                                        </a>
-                                        <!-- /fab button -->
+                                            <fb:login-button size="small"
+                                                             data-width="30"
+                                                             scope="public_profile,email"
+                                                             onlogin="sendTokenToServer();">
+                                            </fb:login-button>
+                                            <!-- /fab button -->
                                     </li>
-
+                                </div>
+                                <div>
                                     <li class="dt-list__item">
                                         <!-- Fab Button -->
-                                        <a href="javascript:void(0)" class="btn btn-outline-primary dt-fab-btn size-30">
+                                        <button id="signinButton" class="btn btn-outline-primary dt-fab-btn size-30">
                                             <i class="icon icon-google-plus icon-xl"></i>
-                                        </a>
+                                        </button>
                                         <!-- /fab button -->
+                                        <script>
+                                            $('#signinButton').click(function () {
+                                                // signInCallback.
+                                                auth2.grantOfflineAccess().then(signInCallback);
+                                            });
+                                        </script>
                                     </li>
-
-                                    <li class="dt-list__item">
-                                        <!-- Fab Button -->
-                                        <a href="javascript:void(0)" class="btn btn-outline-primary dt-fab-btn size-30">
-                                            <i class="icon icon-github icon-xl"></i>
-                                        </a>
-                                        <!-- /fab button -->
-                                    </li>
-
-                                    <li class="dt-list__item">
-                                        <!-- Fab Button -->
-                                        <a href="javascript:void(0)" class="btn btn-outline-primary dt-fab-btn size-30">
-                                            <i class="icon icon-twitter icon-xl"></i>
-                                        </a>
-                                        <!-- /fab button -->
-                                    </li>
-                                </ul>
-                                <!-- /list -->
-                            </div>
-                            <!-- /form group -->
+                                </div>
+                            </ul>
+                            <!-- /list -->
+                        </div>
+                        <!-- /form group -->
 
 
                         </form>

@@ -30,13 +30,13 @@
                         <h1 class="dt-login__title">Login</h1>
                         <!-- /login title -->
 
-                        <p class="f-16">Sign in and explore in-built apps of Drift.</p>
+                        <p class="f-16">Sign in</p>
                     </div>
 
 
                     <!-- Brand logo -->
                     <div class="dt-login__logo">
-                        <a class="dt-brand__logo-link" href="index.php">
+                        <a class="dt-brand__logo-link" href="/">
                             <img class="dt-brand__logo-img" src="../static/images/logo-white.png" alt="Drift">
                         </a>
                     </div>
@@ -75,7 +75,7 @@
                             <div class="dt-checkbox d-block mb-6">
                                 <input name="remember" type="checkbox" id="checkbox-1">
                                 <label class="dt-checkbox-content" for="checkbox-1">
-                                    Keep me login on this device
+                                    Keep me logged in on this device
                                 </label>
                             </div>
                             <!-- /form group -->
@@ -99,14 +99,12 @@
                                 <div>
                                     <li class="dt-list__item">
                                         <!-- Fab Button -->
-                                        <button>
-                                            <fb:login-button size="small"
-                                                             data-width="30"
+                                            <fb:login-button size="medium"
+                                                             data-width="50"
                                                              scope="public_profile,email"
                                                              onlogin="sendTokenToServer();">
                                             </fb:login-button>
                                             <!-- /fab button -->
-                                        </button>
                                     </li>
                                 </div>
                                 <div>
@@ -124,22 +122,6 @@
                                         </script>
                                     </li>
                                 </div>
-
-                                <li class="dt-list__item">
-                                    <!-- Fab Button -->
-                                    <a href="javascript:void(0)" class="btn btn-outline-primary dt-fab-btn size-30">
-                                        <i class="icon icon-github icon-xl"></i>
-                                    </a>
-                                    <!-- /fab button -->
-                                </li>
-
-                                <li class="dt-list__item">
-                                    <!-- Fab Button -->
-                                    <a href="javascript:void(0)" class="btn btn-outline-primary dt-fab-btn size-30">
-                                        <i class="icon icon-twitter icon-xl"></i>
-                                    </a>
-                                    <!-- /fab button -->
-                                </li>
                             </ul>
                             <!-- /list -->
                         </div>
