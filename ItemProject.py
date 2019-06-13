@@ -1,8 +1,10 @@
+import json
 import os
 import random
 import string
 import traceback
 
+import httplib2
 from flask import Flask, render_template, request, flash, redirect, url_for, abort
 from flask_login import login_user, current_user, LoginManager, login_required, logout_user
 from oauth2client import client
@@ -25,18 +27,53 @@ login_manager = LoginManager()
 login_manager.init_app(app)
 CLIENT_SECRET_FILE = 'client_secret.json'
 
+
 def start():
     DBSession = sessionmaker(bind=engine)
     return DBSession()
 
+
 @app.route('/fbconnect', methods=['POST'])
 def fbconnect():
+    db_session = start()
     # If this request does not have `X-Requested-With` header, this could be a CSRF
+    print(request.headers)
     if not request.headers.get('X-Requested-With'):
         abort(403)
 
+    auth_code = request.data
 
+    url = 'https://graph.facebook.com/v3.3/me?access_token={}&fields=name,id,email'.format(str(auth_code).split("'")[1])
+    result = httplib2.Http().request(url, 'GET')[1]
+
+    data = json.loads(result)
+    name = data['name']
+    email = data['email']
+
+    # Get user picture
+    url = 'https://graph.facebook.com/v3.3/me/picture?access_token={}&redirect=0&height=200&width=200'.format(
+        str(auth_code).split("'")[1])
+
+    result = httplib2.Http().request(url, 'GET')[1]
+    data = json.loads(result)
+    picture = data['data']['url']
+
+    # Check if user already exists
+    old_user = db_session.query(User).filter(User.email == email).first()
+
+    if old_user is None:
+        # create new user and login
+        user = User(name=name, email=email, picture=picture)
+        db_session.add(user)
+        db_session.commit()
+        login_user(user)
+    else:
+        login_user(old_user)
+
+    db_session.close()
+    flash("Login Successful, Welcome {}".format(name))
     return redirect(url_for('home'))
+
 
 @app.route('/gauth', methods=['POST'])
 def gauth():
