@@ -9,7 +9,9 @@ from flask import Flask, render_template, request, flash, redirect, url_for, abo
 from flask_login import login_user, current_user, LoginManager, login_required, logout_user
 from oauth2client import client
 from sqlalchemy import create_engine
+from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import sessionmaker
+from sqlalchemy.orm.exc import NoResultFound
 from validate_email import validate_email
 from werkzeug.security import generate_password_hash, check_password_hash
 from whitenoise import WhiteNoise
@@ -29,6 +31,7 @@ CLIENT_SECRET_FILE = 'client_secret.json'
 
 
 def start():
+    ''' Start a new database session for each database operation'''
     DBSession = sessionmaker(bind=engine)
     return DBSession()
 
@@ -37,12 +40,13 @@ def start():
 def fbconnect():
     db_session = start()
     # If this request does not have `X-Requested-With` header, this could be a CSRF
-    print(request.headers)
     if not request.headers.get('X-Requested-With'):
         abort(403)
 
+    # Retrieve the access token from the request
     auth_code = request.data
 
+    # Retrieve the user details with the access token
     url = 'https://graph.facebook.com/v3.3/me?access_token={}&fields=name,id,email'.format(str(auth_code).split("'")[1])
 
     result = httplib2.Http().request(url, 'GET')[1]
@@ -68,6 +72,7 @@ def fbconnect():
         db_session.commit()
         login_user(user, remember=True)
     else:
+        # login the old user
         login_user(old_user, remember=True)
 
     db_session.close()
@@ -102,6 +107,7 @@ def gauth():
         db_session.commit()
         login_user(user)
     else:
+        # login the old user
         login_user(old_user)
 
     db_session.close()
@@ -112,6 +118,7 @@ def gauth():
 @login_manager.user_loader
 def load_user(user_id):
     db_session = start()
+    # load the current user from the databasee
     user = db_session.query(User).filter(User.id == user_id).one()
     db_session.close()
     return user
@@ -120,7 +127,9 @@ def load_user(user_id):
 @app.route('/')
 def home():
     db_session = start()
+    # load all categories
     categories = db_session.query(Category).all()
+    # load last 8 items in the database
     items = db_session.query(Items).order_by(Items.id.desc()).limit(8).all()
 
     db_session.close()
@@ -133,22 +142,24 @@ def register():
 
     if request.method == 'POST':
         try:
+            # Retrieve the form details and add the user,
+            # an exception will be thrown if the user exists.
             name = "{}".format(request.form['name'])
             if not validate_email(request.form['email'], check_mx=True):
                 flash("Invalid Email")
                 return render_template('register.html')
 
             email = request.form['email']
-            print(email)
+            # generate sha256 password hash
             password = generate_password_hash(request.form['password'])
             user = User(name=name, email=email, password=password)
             db_session.add(user)
             db_session.commit()
-            message = "Registration Successful"
-            flash(message)
+
+            flash("Registration Successful")
             db_session.close()
             return redirect(url_for('login'))
-        except:
+        except IntegrityError:
             traceback.print_exc()
             flash("User Already Exists. Login Instead")
             db_session.close()
@@ -160,20 +171,25 @@ def register():
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     db_session = start()
+
+    # Redirect user if the user is logged in already
     if current_user.is_authenticated:
         return redirect(url_for('home'))
+
     if request.method == 'POST':
         email = request.form['email']
         password = request.form['password']
+        # set the remember me variable
         remember = False if request.form.get('remember') is None else True
         try:
             user = db_session.query(User).filter(User.email == email).one()
-        except:
+        except NoResultFound:
             traceback.print_exc()
             flash("User Not Found")
             db_session.close()
             return render_template('login.html')
 
+        # check the user password with the hashed password
         passcheck = check_password_hash(user.password, password)
 
         if passcheck:
@@ -193,6 +209,7 @@ def login():
 @app.route('/logout')
 @login_required
 def logout():
+    # clear the user session and logout
     logout_user()
     flash("Log Out Successful!")
     return redirect(url_for('home'))
@@ -213,6 +230,7 @@ def category():
 def edit_category(category_id):
     db_session = start()
 
+    # retrieve the category from the id
     category = db_session.query(Category).filter(Category.id == category_id).one()
 
     if request.method == 'POST':
@@ -266,6 +284,7 @@ def delete_category(category_id):
 def item(category_id):
     db_session = start()
 
+    # retrieve the items for each category
     category = db_session.query(Category).filter(Category.id == category_id).one()
     category_items = db_session.query(Items).filter(Items.category_id == category_id).all()
 
@@ -336,6 +355,7 @@ def delete_item(category_id, item_id):
     db_session.close()
     return render_template('delete-item.html', user=current_user, category=category, item=item)
 
+
 @app.route('/<int:category_id>/JSON')
 def itemJSON(category_id):
     db_session = start()
@@ -356,14 +376,8 @@ def categoryJSON(category_id, item_id):
 
 @app.errorhandler(404)
 def page_not_found(e):
+    '''Renders a template for all 404 error'''
     return render_template('404.html'), 404
-
-
-@app.after_request
-def apply_caching(response):
-    response.headers["X-Frame-Options"] = "SAMEORIGIN"
-    return response
-
 
 @app.errorhandler(401)
 def page_not_found(e):
