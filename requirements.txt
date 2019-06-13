@@ -8,3 +8,4 @@ flask-talisman
 flask-csp
 validate_email
 Py3DNS
+oauth2client

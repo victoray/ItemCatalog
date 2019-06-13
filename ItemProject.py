@@ -44,8 +44,8 @@ def fbconnect():
     auth_code = request.data
 
     url = 'https://graph.facebook.com/v3.3/me?access_token={}&fields=name,id,email'.format(str(auth_code).split("'")[1])
-    result = httplib2.Http().request(url, 'GET')[1]
 
+    result = httplib2.Http().request(url, 'GET')[1]
     data = json.loads(result)
     name = data['name']
     email = data['email']
@@ -121,7 +121,7 @@ def load_user(user_id):
 def home():
     db_session = start()
     categories = db_session.query(Category).all()
-    items = db_session.query(Items).order_by(Items.id.desc()).limit(5).all()
+    items = db_session.query(Items).order_by(Items.id.desc()).limit(8).all()
 
     db_session.close()
     return render_template('index.html', user=current_user, categories=categories, items=items)
