@@ -45,7 +45,7 @@
                 console.log('Successful login for: ' + response.name);
                 $.ajax({
                     type: 'POST',
-                    url: 'http://localhost:10000/fbconnect',
+                    url: '/fbconnect',
 
                     headers: {
                         'X-Requested-With': 'XMLHttpRequest'
@@ -507,7 +507,7 @@
             // Send the code to the server
             $.ajax({
                 type: 'POST',
-                url: 'http://localhost:10000/gauth',
+                url: '/gauth',
                 // Always include an `X-Requested-With` header in every AJAX request,
                 // to protect against CSRF attacks.
                 headers: {
