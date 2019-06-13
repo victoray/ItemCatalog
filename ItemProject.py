@@ -13,6 +13,7 @@ from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.orm.exc import NoResultFound
 from validate_email import validate_email
+from waitress import serve
 from werkzeug.security import generate_password_hash, check_password_hash
 from whitenoise import WhiteNoise
 
@@ -389,5 +390,4 @@ if __name__ == "__main__":
     app.secret_key = "".join(random.choice(string.punctuation + string.ascii_letters) for i in range(32))
     app.debug = True
     port = int(os.environ.get('PORT', 10000))
-    # serve(app, host='localhost', port=port)
-    app.run(host='localhost', port=port)
+    serve(app, host='localhost', port=port)
