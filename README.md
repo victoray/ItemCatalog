@@ -38,7 +38,7 @@ link/<category_id>/JSON
 
 Sample
 
-https://itemcatalogv3.herokuapp.com/1/2/JSON
+https://itemcatalogv3.herokuapp.com/1/2/JSON  
 https://itemcatalogv3.herokuapp.com/1/JSON
 
 
@@ -70,4 +70,4 @@ web: gunicorn app:app --preload
 
 ## Acknowledgments
 
-* [Drift](http://drift.g-axon.work) - Tempelate Design
+* [Drift](http://drift.g-axon.work) - Template Design
