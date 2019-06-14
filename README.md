@@ -31,6 +31,16 @@ Open a web browser, and navigate to the app at http://localhost:5000/.
 [Heroku](https://itemcatalogv3.herokuapp.com/)  
 [Azure](http://itemcatalogv2.azurewebsites.net/)
 
+## JSON Endpoints
+
+link/<category_id>/<item_id>/JSON
+link/<category_id>/JSON
+
+Sample
+
+https://itemcatalogv3.herokuapp.com/1/2/JSON
+https://itemcatalogv3.herokuapp.com/1/JSON
+
 
 ## Deployment
 
