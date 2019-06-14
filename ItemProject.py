@@ -36,7 +36,7 @@ def start():
     DBSession = sessionmaker(bind=engine)
     return DBSession()
 
-
+# FaceBook Login
 @app.route('/fbconnect', methods=['POST'])
 def fbconnect():
     db_session = start()
@@ -80,7 +80,7 @@ def fbconnect():
     flash("Login Successful, Welcome {}".format(name))
     return redirect(url_for('home'))
 
-
+# Google Sign in
 @app.route('/gauth', methods=['POST'])
 def gauth():
     db_session = start()
@@ -115,7 +115,7 @@ def gauth():
     flash("Login Successful, Welcome {}".format(name))
     return redirect(url_for('home'))
 
-
+# User Login
 @login_manager.user_loader
 def load_user(user_id):
     db_session = start()
@@ -124,7 +124,7 @@ def load_user(user_id):
     db_session.close()
     return user
 
-
+# Home Page
 @app.route('/')
 def home():
     db_session = start()
@@ -136,7 +136,7 @@ def home():
     db_session.close()
     return render_template('index.html', user=current_user, categories=categories, items=items)
 
-
+# Registration Page
 @app.route('/register', methods=['POST', 'GET'])
 def register():
     db_session = start()
@@ -168,7 +168,7 @@ def register():
 
     return render_template('register.html')
 
-
+# Login Page
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     db_session = start()
@@ -206,7 +206,7 @@ def login():
     db_session.close()
     return render_template('login.html')
 
-
+# Logout
 @app.route('/logout')
 @login_required
 def logout():
@@ -220,12 +220,7 @@ def logout():
 def resetpassword():
     return "reset Password"
 
-
-@app.route('/category')
-def category():
-    return render_template('category.html')
-
-
+# Edit Category
 @app.route('/<int:category_id>/edit', methods=['POST', 'GET'])
 @login_required
 def edit_category(category_id):
@@ -244,14 +239,14 @@ def edit_category(category_id):
     db_session.close()
     return render_template('edit-category.html', user=current_user, category=category)
 
-
+# New Category
 @app.route('/new', methods=['GET', 'POST'])
 @login_required
 def new_category():
     db_session = start()
 
     if request.method == 'POST':
-        category = Category(name=request.form['name'])
+        category = Category(name=request.form['name'], user_id=current_user.id)
         print(category.name)
         db_session.add(category)
         db_session.commit()
@@ -262,7 +257,7 @@ def new_category():
     db_session.close()
     return render_template('new-category.html', user=current_user)
 
-
+# Delete Category
 @app.route('/<int:category_id>/delete', methods=['GET', 'POST'])
 @login_required
 def delete_category(category_id):
@@ -271,16 +266,20 @@ def delete_category(category_id):
     category = db_session.query(Category).filter(Category.id == category_id).one()
 
     if request.method == 'POST':
-        db_session.delete(category)
-        db_session.commit()
-        db_session.close()
-        flash("{} Deleted".format(category.name))
-        return redirect(url_for('home'))
+        if category.user_id != current_user.id:
+            flash("You can only delete items created by you!")
+            return redirect(url_for('home'))
+        else:
+            db_session.delete(category)
+            db_session.commit()
+            db_session.close()
+            flash("{} Deleted".format(category.name))
+            return redirect(url_for('home'))
 
     db_session.close()
     return render_template('delete-category.html', user=current_user, category=category)
 
-
+# Items Page
 @app.route('/<int:category_id>/')
 def item(category_id):
     db_session = start()
@@ -293,7 +292,7 @@ def item(category_id):
     return render_template('item.html', user=current_user,
                            category=category, category_items=category_items)
 
-
+# Edit Item
 @app.route('/<int:category_id>/<int:item_id>/edit', methods=['GET', 'POST'])
 @login_required
 def edit_item(category_id, item_id):
@@ -316,7 +315,7 @@ def edit_item(category_id, item_id):
     db_session.close()
     return render_template('edit-item.html', user=current_user, category=category, item=item)
 
-
+# New Item
 @app.route('/<int:category_id>/new', methods=['GET', 'POST'])
 @login_required
 def new_item(category_id):
@@ -337,7 +336,7 @@ def new_item(category_id):
     db_session.close()
     return render_template('new-item.html', category=category, user=current_user)
 
-
+# Delete Item
 @app.route('/<int:category_id>/<int:item_id>/delete', methods=['GET', 'POST'])
 @login_required
 def delete_item(category_id, item_id):
@@ -347,16 +346,20 @@ def delete_item(category_id, item_id):
     item = db_session.query(Items).filter(Items.id == item_id).one()
 
     if request.method == 'POST':
-        db_session.delete(item)
-        db_session.commit()
-        db_session.close()
-        flash("{} Deleted".format(item.name))
-        return redirect(url_for('item', category_id=category_id))
+        if current_user.id != item.user_id:
+            flash("You can only delete items created by you!")
+            return redirect(url_for('item', category_id=category_id))
+        else:
+            db_session.delete(item)
+            db_session.commit()
+            db_session.close()
+            flash("{} Deleted".format(item.name))
+            return redirect(url_for('item', category_id=category_id))
 
     db_session.close()
     return render_template('delete-item.html', user=current_user, category=category, item=item)
 
-
+# Category Items JSON
 @app.route('/<int:category_id>/JSON')
 def itemJSON(category_id):
     db_session = start()
