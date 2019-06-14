@@ -40,7 +40,7 @@ To deploy on Azure:
 
 To Deploy on Heroku:
 
-[Getting Started on Heroku with Python](https://devcenter.heroku.com/articles/getting-started-with-python)  
+[Getting Started on Heroku with Python](https://devcenter.heroku.com/articles/getting-started-with-python)    
 Add the following code to the Procfile
 
 ```
