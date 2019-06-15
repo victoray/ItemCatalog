@@ -29,7 +29,8 @@ Open a web browser, and navigate to the app at http://localhost:5000/.
 ## App Live Demo
 
 [Heroku](https://itemcatalogv3.herokuapp.com/)  
-[Azure](http://itemcatalogv2.azurewebsites.net/)
+[Azure](http://itemcatalogv2.azurewebsites.net/)  
+[Ubuntu Server](http://40.114.111.144/) Azure VM
 
 ## JSON Endpoints
 
