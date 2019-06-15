@@ -28,8 +28,8 @@ Open a web browser, and navigate to the app at http://localhost:5000/.
 
 ## App Live Demo
 
-[Heroku](https://itemcatalogv3.herokuapp.com/)  with Facbook and Google Sign in
-[Azure](http://itemcatalogv2.azurewebsites.net/) With Google Sign in
+[Heroku](https://itemcatalogv3.herokuapp.com/) with Facbook and Google Sign in  
+[Azure](http://itemcatalogv2.azurewebsites.net/) With Google Sign in  
 [Ubuntu Server](http://40.114.111.144/) Azure VM running APACHE with basic oauth
 
 ## JSON Endpoints
