@@ -36,6 +36,7 @@ def start():
     DBSession = sessionmaker(bind=engine)
     return DBSession()
 
+
 # FaceBook Login
 @app.route('/fbconnect', methods=['POST'])
 def fbconnect():
@@ -80,6 +81,7 @@ def fbconnect():
     flash("Login Successful, Welcome {}".format(name))
     return redirect(url_for('home'))
 
+
 # Google Sign in
 @app.route('/gauth', methods=['POST'])
 def gauth():
@@ -115,6 +117,7 @@ def gauth():
     flash("Login Successful, Welcome {}".format(name))
     return redirect(url_for('home'))
 
+
 # User Login
 @login_manager.user_loader
 def load_user(user_id):
@@ -123,6 +126,7 @@ def load_user(user_id):
     user = db_session.query(User).filter(User.id == user_id).one()
     db_session.close()
     return user
+
 
 # Home Page
 @app.route('/')
@@ -135,6 +139,7 @@ def home():
 
     db_session.close()
     return render_template('index.html', user=current_user, categories=categories, items=items)
+
 
 # Registration Page
 @app.route('/register', methods=['POST', 'GET'])
@@ -167,6 +172,7 @@ def register():
             return render_template('register.html')
 
     return render_template('register.html')
+
 
 # Login Page
 @app.route('/login', methods=['GET', 'POST'])
@@ -206,6 +212,7 @@ def login():
     db_session.close()
     return render_template('login.html')
 
+
 # Logout
 @app.route('/logout')
 @login_required
@@ -220,6 +227,7 @@ def logout():
 def resetpassword():
     return "reset Password"
 
+
 # Edit Category
 @app.route('/<int:category_id>/edit', methods=['POST', 'GET'])
 @login_required
@@ -228,6 +236,10 @@ def edit_category(category_id):
 
     # retrieve the category from the id
     category = db_session.query(Category).filter(Category.id == category_id).one()
+
+    if category.user_id != current_user.id:
+        flash("You can only edit items created by you!")
+        return redirect(url_for('item', category_id=category_id))
 
     if request.method == 'POST':
         category.name = request.form['name']
@@ -238,6 +250,7 @@ def edit_category(category_id):
 
     db_session.close()
     return render_template('edit-category.html', user=current_user, category=category)
+
 
 # New Category
 @app.route('/new', methods=['GET', 'POST'])
@@ -257,6 +270,7 @@ def new_category():
     db_session.close()
     return render_template('new-category.html', user=current_user)
 
+
 # Delete Category
 @app.route('/<int:category_id>/delete', methods=['GET', 'POST'])
 @login_required
@@ -265,19 +279,20 @@ def delete_category(category_id):
 
     category = db_session.query(Category).filter(Category.id == category_id).one()
 
+    if category.user_id != current_user.id:
+        flash("You can only delete items created by you!")
+        return redirect(url_for('home'))
+
     if request.method == 'POST':
-        if category.user_id != current_user.id:
-            flash("You can only delete items created by you!")
-            return redirect(url_for('home'))
-        else:
-            db_session.delete(category)
-            db_session.commit()
-            db_session.close()
-            flash("{} Deleted".format(category.name))
-            return redirect(url_for('home'))
+        db_session.delete(category)
+        db_session.commit()
+        db_session.close()
+        flash("{} Deleted".format(category.name))
+        return redirect(url_for('home'))
 
     db_session.close()
     return render_template('delete-category.html', user=current_user, category=category)
+
 
 # Items Page
 @app.route('/<int:category_id>/')
@@ -292,6 +307,7 @@ def item(category_id):
     return render_template('item.html', user=current_user,
                            category=category, category_items=category_items)
 
+
 # Edit Item
 @app.route('/<int:category_id>/<int:item_id>/edit', methods=['GET', 'POST'])
 @login_required
@@ -299,7 +315,12 @@ def edit_item(category_id, item_id):
     db_session = start()
 
     category = db_session.query(Category).filter(Category.id == category_id).one()
+
     item = db_session.query(Items).filter(Items.id == item_id).one()
+
+    if current_user.id != item.user_id:
+        flash("You can only edit items created by you!")
+        return redirect(url_for('item', category_id=category_id))
 
     if request.method == 'POST':
         item.name = request.form.get('name')
@@ -314,6 +335,7 @@ def edit_item(category_id, item_id):
 
     db_session.close()
     return render_template('edit-item.html', user=current_user, category=category, item=item)
+
 
 # New Item
 @app.route('/<int:category_id>/new', methods=['GET', 'POST'])
@@ -336,6 +358,7 @@ def new_item(category_id):
     db_session.close()
     return render_template('new-item.html', category=category, user=current_user)
 
+
 # Delete Item
 @app.route('/<int:category_id>/<int:item_id>/delete', methods=['GET', 'POST'])
 @login_required
@@ -345,19 +368,20 @@ def delete_item(category_id, item_id):
     category = db_session.query(Category).filter(Category.id == category_id).one()
     item = db_session.query(Items).filter(Items.id == item_id).one()
 
+    if current_user.id != item.user_id:
+        flash("You can only delete items created by you!")
+        return redirect(url_for('item', category_id=category_id))
+
     if request.method == 'POST':
-        if current_user.id != item.user_id:
-            flash("You can only delete items created by you!")
-            return redirect(url_for('item', category_id=category_id))
-        else:
-            db_session.delete(item)
-            db_session.commit()
-            db_session.close()
-            flash("{} Deleted".format(item.name))
-            return redirect(url_for('item', category_id=category_id))
+        db_session.delete(item)
+        db_session.commit()
+        db_session.close()
+        flash("{} Deleted".format(item.name))
+        return redirect(url_for('item', category_id=category_id))
 
     db_session.close()
     return render_template('delete-item.html', user=current_user, category=category, item=item)
+
 
 # Category Items JSON
 @app.route('/<int:category_id>/JSON')
@@ -382,6 +406,7 @@ def categoryJSON(category_id, item_id):
 def page_not_found(e):
     '''Renders a template for all 404 error'''
     return render_template('404.html'), 404
+
 
 @app.errorhandler(401)
 def page_not_found(e):
