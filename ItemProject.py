@@ -401,6 +401,10 @@ def categoryJSON(category_id, item_id):
     db_session.close()
     return jsonify(Item=item.serialize)
 
+@app.route('/privacy')
+def privacy():
+    return render_template('privacy.html', user=current_user)
+
 
 @app.errorhandler(404)
 def page_not_found(e):
