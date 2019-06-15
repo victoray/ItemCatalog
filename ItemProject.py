@@ -238,8 +238,8 @@ def edit_category(category_id):
     category = db_session.query(Category).filter(Category.id == category_id).one()
 
     if category.user_id != current_user.id:
-        flash("You can only edit items created by you!")
-        return redirect(url_for('item', category_id=category_id))
+        flash("You can only edit categories created by you!")
+        return redirect(url_for('home'))
 
     if request.method == 'POST':
         category.name = request.form['name']
@@ -280,7 +280,7 @@ def delete_category(category_id):
     category = db_session.query(Category).filter(Category.id == category_id).one()
 
     if category.user_id != current_user.id:
-        flash("You can only delete items created by you!")
+        flash("You can only delete categories created by you!")
         return redirect(url_for('home'))
 
     if request.method == 'POST':
