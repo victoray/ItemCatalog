@@ -34,7 +34,7 @@ Open a web browser, and navigate to the app at http://localhost:5000/.
 
 ## JSON Endpoints
 
-link/<category_id>/<item_id>/JSON
+link/<category_id>/<item_id>/JSON  
 link/<category_id>/JSON
 
 Sample
